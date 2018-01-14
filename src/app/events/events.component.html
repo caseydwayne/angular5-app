@@ -1,0 +1,21 @@
+<p>
+  Selected Event: 
+    <span *ngIf="selected;then selected_true else selected_false">      
+    </span>
+  <ng-template #selected_true>
+    {{selected.name}}
+  </ng-template>
+  <ng-template #selected_false>
+    Staying Home
+  </ng-template>
+</p>
+
+<ul>
+
+  <li class="event-preview" *ngFor="let event of events"  (click)="onSelect(event)">
+    
+    <app-event [event]="event"></app-event> 
+    
+  </li>
+  
+</ul>
