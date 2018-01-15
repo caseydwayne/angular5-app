@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable, Input, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
@@ -13,13 +13,22 @@ const HTTP_OPTIONS = {
 @Injectable()
 export class TransmitService implements OnInit {
 
-  results: Object;
+  // @input('body')
+
+  private results: Object;
 
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-    this.http.post( API_URL, HTTP_OPTIONS )
-      .subscribe( () => { console.log('Finish setting up the transmit.service subscribe callback'); } );
+    this.http.post( API_URL, this.results, HTTP_OPTIONS )
+      .subscribe(
+        response => {
+          console.log('Finish setting up the transmit.service subscribe callback');
+        },
+        error => {
+          console.log( 'Could not get data from', API_URL, error );
+        }
+      );
   }
 
 }

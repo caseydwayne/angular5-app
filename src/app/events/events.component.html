@@ -1,21 +1,48 @@
-<p>
-  Selected Event: 
-    <span *ngIf="selected;then selected_true else selected_false">      
-    </span>
-  <ng-template #selected_true>
-    {{selected.name}}
-  </ng-template>
-  <ng-template #selected_false>
-    Staying Home
-  </ng-template>
-</p>
+<section class="events">
 
-<ul>
+  <mat-grid-list 
+    cols="{{width>1200?2:1}}" 
+    gutterSize="4rem" 
+    rowHeight="{{(width>640)?'2:1':((width<320)?'1:2':'1:1')}}"
+    >
 
-  <li class="event-preview" *ngFor="let event of events"  (click)="onSelect(event)">
+    <mat-grid-tile     
+      *ngFor="let event of events"
+      class="event-preview"              
+      (click)="onSelect(event)"
+      >
     
-    <app-event [event]="event"></app-event> 
-    
-  </li>
+      <div class="backdrop" style="background-image: url(assets/event-thumbnail.jpg)"></div>
+      
+      <mat-grid-tile-header>{{event.name}}</mat-grid-tile-header>
+      
+      <div class="wrap">
+            
+        <div class="description">
+          <p>Lorum ipsum deloris santai fengue.</p>
+          <p class="location">Dragonfly, Alabama</p>
+        </div>        
+        
+      </div>
+      
+      <mat-grid-tile-footer>I'm Going!</mat-grid-tile-footer>
+    </mat-grid-tile>
   
-</ul>
+  </mat-grid-list>
+  
+</section>
+
+<!-- <app-event preview=true [event]="event"></app-event> --> 
+
+<div *ngIf="selected">
+  Selected: {{selected.name}}
+  <ng-template cdkPortal="overlayPortal"></ng-template>
+<!--
+  <div *cdkPortal="overlayPortal">
+  </div>  
+  <app-overlay>
+    <h2>Overlay Text</h2>
+  </app-overlay>
+  -->
+
+</div>

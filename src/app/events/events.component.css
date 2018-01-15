@@ -1,9 +1,40 @@
-h2 { color: white }
-ul { list-style: none; margin: 1rem; }
-li {
-  border: 1px solid gray;
+.events {
+  max-width: 1600px;
+  padding: 4rem;
+  margin: auto;  
+}
+
+.event-preview .wrap {
+  position: relative;
+  z-index: 2;
+}
+
+
+mat-grid-tile { cursor: pointer; }
+mat-grid-tile-header, mat-grid-tile-footer { z-index: 2; }
+.event-preview .backdrop {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: blur(1rem);
+  transition-duration: .2s;
+  z-index: 1;
+}
+
+.event-preview:hover .backdrop {
+  filter: blur(.1rem);
+}
+
+.event-preview .description {  
   padding: 1rem;
-  margin: 1rem;
-  background: #770000;
-  cursor: pointer;	
+}
+
+.event-preview .location {
+  text-align: center;
+  opacity: .75;
+  font-size: 80%;
 }

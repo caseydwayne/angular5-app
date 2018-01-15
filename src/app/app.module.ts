@@ -7,22 +7,37 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 
 import { EventsComponent } from './events/events.component';
-
 import { EventComponent } from './event/event.component';
 
+import { OverlayModule } from '@angular/cdk/overlay';
+import { OverlayComponent } from './overlay.component';
+import { OverlayService } from './overlay.service';
+
 import { RequestService } from './http/request.service';
+
+import { MaterialModule } from './material.module';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     EventsComponent,
-    EventComponent
+    EventComponent,
+    OverlayComponent
   ],
   imports: [
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+    MaterialModule,
+    OverlayModule
   ],
-  providers: [ RequestService ],
+  providers: [
+    OverlayService,
+    RequestService
+  ],
+  entryComponents: [
+    OverlayComponent
+  ],
   bootstrap: [ AppComponent ]
 })
 

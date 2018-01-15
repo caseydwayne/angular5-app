@@ -1,9 +1,13 @@
-<h1 class="page-title">{{title}}</h1>
+<div class="mat-app-background mat-typography">
+	
+  <div *ngIf="loading">
+    <mat-progress-bar mode="buffer" value=10 bufferValue=50></mat-progress-bar>
+  </div>
+	
+  <h1 class="page-title">{{title}}</h1>
+	
+  <p>This is a sample SPA created with Angular 5.</p>
+	
+  <app-events></app-events>
 
-<p>This is a sample SPA created with Angular 5.</p>
-
-<div *ngIf="loading">
-  <h4>Loading</h4>
 </div>
-
-<app-events></app-events>

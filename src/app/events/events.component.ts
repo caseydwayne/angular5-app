@@ -14,8 +14,11 @@ export class EventsComponent {
 
   selected: Event;
 
+  width = window.innerWidth;
+
   onSelect(event: Event): void {
     this.selected = event;
+
   }
 
 }
