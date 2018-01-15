@@ -14,6 +14,8 @@ export class EventComponent implements OnInit {
   // private preview: Boolean;
   private image: String;
 
+  private message = encodeURI( 'View details at ' + location );
+
   ngOnInit() {
     // alert( this.preview || false );
     let img = 'assets/event';

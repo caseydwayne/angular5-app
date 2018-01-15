@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Event } from '../event/event';
 import { EVENTS } from '../data/mock-events';
+import { RequestService } from '../http/request.service';
 
 @Component({
   selector: 'app-events',
@@ -8,7 +9,9 @@ import { EVENTS } from '../data/mock-events';
   styleUrls: ['./events.component.css']
 })
 
-export class EventsComponent {
+export class EventsComponent implements OnInit {
+
+  constructor(private request: RequestService ) {}
 
   events = EVENTS;
 
@@ -18,7 +21,10 @@ export class EventsComponent {
 
   onSelect(event: Event): void {
     this.selected = event;
+  }
 
+  ngOnInit (): void {
+    this.request.getEvents( () => {} );
   }
 
 }

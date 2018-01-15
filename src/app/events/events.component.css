@@ -26,8 +26,14 @@ mat-grid-tile-header, mat-grid-tile-footer { z-index: 2; }
 }
 
 .event-preview:hover .backdrop {
+  filter: blur(.2rem);
+  transition-duration: .4s;
+}
+
+.event-preview:active .backdrop {
   filter: blur(.1rem);
 }
+
 
 .event-preview .description {  
   padding: 1rem;

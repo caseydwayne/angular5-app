@@ -1,0 +1,23 @@
+---
+events:
+  -
+    name: Concert
+    location: Knoxville, TN
+    description: >
+      Concert description.
+    image: assets/event.jpg
+    thumbnail: assets/event-thumbnail.jpg  
+  -
+    name: Ballgame
+    location: Huntsville, AL
+    description: >
+      Ballgame description.
+    image: assets/event.jpg
+    thumbnail: assets/event-thumbnail.jpg
+  -
+    name: Race
+    location: Daytona, FL
+    description: >
+      Race description.
+    image: assets/event.jpg
+    thumbnail: assets/event-thumbnail.jpg  

@@ -8,7 +8,8 @@
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",    
+    "json": "json-server -p 8008 -w api/mock.json"
   },
   "private": true,
   "dependencies": {

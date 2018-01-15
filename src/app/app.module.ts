@@ -17,6 +17,9 @@ import { RequestService } from './http/request.service';
 
 import { MaterialModule } from './material.module';
 
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+
 
 @NgModule({
   declarations: [
@@ -29,7 +32,8 @@ import { MaterialModule } from './material.module';
     BrowserModule,
     HttpClientModule,
     MaterialModule,
-    OverlayModule
+    OverlayModule,
+    ServiceWorkerModule.register( '/ngsw-worker.js', { enabled: environment.production } )
   ],
   providers: [
     OverlayService,

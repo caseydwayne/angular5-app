@@ -7,4 +7,5 @@ html, body {
   padding: 0;
 }
 
+img { max-width: 100%; }
 @import "~@angular/material/prebuilt-themes/pink-bluegrey.css";

@@ -1,3 +1,18 @@
+<div *ngIf="selected">
+  <!-- Selected: {{selected.name}}  -->
+  <ng-template cdkPortal="overlayPortal">
+    <app-event [event]="selected"></app-event>
+  </ng-template>
+<!--
+  <div *cdkPortal="overlayPortal">
+  </div>  
+  <app-overlay>
+    <h2>Overlay Text</h2>
+  </app-overlay>
+  -->
+
+</div>
+
 <section class="events">
 
   <mat-grid-list 
@@ -30,19 +45,4 @@
   
   </mat-grid-list>
   
-</section>
-
-<!-- <app-event preview=true [event]="event"></app-event> --> 
-
-<div *ngIf="selected">
-  Selected: {{selected.name}}
-  <ng-template cdkPortal="overlayPortal"></ng-template>
-<!--
-  <div *cdkPortal="overlayPortal">
-  </div>  
-  <app-overlay>
-    <h2>Overlay Text</h2>
-  </app-overlay>
-  -->
-
-</div>
+</section> 
