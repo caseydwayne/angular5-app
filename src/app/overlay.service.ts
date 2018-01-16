@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { OverlayComponent } from './overlay.component';
-import { PortalModule } from '@angular/cdk/portal';
+import { OverlayModule, Overlay } from '@angular/cdk/overlay';
+import { PortalModule, ComponentPortal } from '@angular/cdk/portal';
 
 @Injectable()
 export class OverlayService {
@@ -12,6 +13,7 @@ export class OverlayService {
     const portal = new ComponentPortal(OverlayComponent);
     ref.attach(portal);
   }
+
   close() {
     console.log( 'Closing Portal' );
   }

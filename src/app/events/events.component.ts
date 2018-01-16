@@ -11,9 +11,10 @@ import { RequestService } from '../http/request.service';
 
 export class EventsComponent implements OnInit {
 
-  constructor(private request: RequestService ) {}
+  constructor( private request: RequestService ) {}
 
-  events = EVENTS;
+  // events = EVENTS;
+  events;
 
   selected: Event;
 
@@ -23,8 +24,17 @@ export class EventsComponent implements OnInit {
     this.selected = event;
   }
 
-  ngOnInit (): void {
-    this.request.getEvents( () => {} );
+  ngOnInit () {
+    this.request.getEvents().subscribe(
+      data => {
+        console.log(data);
+        this.events = data;
+      },
+      err => {
+        this.request.error('No Events Listed');
+        this.events = EVENTS;
+      }
+    );
   }
 
 }

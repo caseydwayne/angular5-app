@@ -9,3 +9,18 @@ html, body {
 
 img { max-width: 100%; }
 @import "~@angular/material/prebuilt-themes/pink-bluegrey.css";
+
+.error {
+  background: #770000;
+  color: white;
+}
+
+.success {
+  background: green;
+  text: white;
+}
+
+.warn {
+  background: yellow;
+  text: #d2d2d2;
+}

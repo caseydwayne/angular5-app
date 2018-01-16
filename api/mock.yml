@@ -1,6 +1,7 @@
 ---
 events:
   -
+    id: 0
     name: Concert
     location: Knoxville, TN
     description: >
@@ -8,6 +9,7 @@ events:
     image: assets/event.jpg
     thumbnail: assets/event-thumbnail.jpg  
   -
+    id: 1
     name: Ballgame
     location: Huntsville, AL
     description: >
@@ -15,6 +17,7 @@ events:
     image: assets/event.jpg
     thumbnail: assets/event-thumbnail.jpg
   -
+    id: 2
     name: Race
     location: Daytona, FL
     description: >

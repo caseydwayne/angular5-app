@@ -1,3 +1,8 @@
+.event {
+  padding: 2rem;
+  color: #2d2d2d;
+}
+
 ul {
   border: 1px solid gray;
   padding: 1rem;

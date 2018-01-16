@@ -17,10 +17,11 @@ export class EventComponent implements OnInit {
   private message = encodeURI( 'View details at ' + location );
 
   ngOnInit() {
+    this.event.image = 'assets/event.jpg';
     // alert( this.preview || false );
-    let img = 'assets/event';
-    if ( this.preview ) { img += '-thumbnail'; }
-    this.event.image = img + '.jpg';
+    // let img = 'assets/event';
+    // if ( this.preview ) { img += '-thumbnail'; }
+    // this.event.image = img + '.jpg';
   }
 
 }
