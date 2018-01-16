@@ -16,6 +16,10 @@ const HTTP_OPTIONS = {
   })
 };
 
+/*
+ * The RequestService handles communication with the DragonFly API
+ */
+
 @Injectable()
 export class RequestService implements OnInit {
 
@@ -26,35 +30,24 @@ export class RequestService implements OnInit {
 
   private results;
 
-  private request( path: String, cb?: Function ) {
-    const destination = API_URL + path;
-    return this.http.get( destination, HTTP_OPTIONS )
-      .retry(2)
-      .subscribe(
-        data => {
-          console.log( 'Found Data:', data );
-          if ( cb ) { cb( data ); }
-          return this.results = data;
-        },
-        error => {
-          console.log( 'Could not get data from', destination, error );
-          this.snackBar.open( error.message, 'OK', { panelClass: 'error' } );
-        }
-      );
-  }
 
   public error( message ) {
     this.snackBar.open( message, 'OK', { panelClass: 'error' } );
   }
 
+  /*
+   * @method getEvents
+   * returns an observable containing Event JSON (see event/event for schema)
+   */
+
   public getEvents() {
     return this.http.get( API_URL + 'events', HTTP_OPTIONS );
-    // return this.request( 'events' );
   }
 
-  getEvent( event: String, cb? ) {
-    return this.request( 'events/' + event , cb );
-  }
+  /*
+   * @method getStatus
+   * returns an observable containing UserStatus JSON ( { coming: <boolean> } )
+   */
 
   public getStatus( eventid: string, user: string ) {
     return this.http.get(
@@ -63,10 +56,15 @@ export class RequestService implements OnInit {
     );
   }
 
-  public updateStatus( event, user, value ) {
+  /*
+   * @method updateStatus
+   * updates the UserStatus in the API by toggling existing boolean (or explicitly via the 'value' argument)
+   */
+
+  public updateStatus( event, user, value?: boolean ) {
     const rsvp = ( typeof value !== 'undefined' ? value : !this.getStatus( event, user ) );
-    const data = { coming: rsvp, client_id: 'anything', client_secret: 'evalpass' };
-    this.http.post( `${API_URL}events/${event}/status/${user}`, data, HTTP_OPTIONS )
+    const data = { coming: rsvp };
+    return this.http.post( `${API_URL}events/${event}/status/${user}`, data, HTTP_OPTIONS )
       .retry(3)
       .subscribe(
         response => {
@@ -79,7 +77,6 @@ export class RequestService implements OnInit {
           this.snackBar.open( 'Could not change RSVP', 'OK', { panelClass: 'warn' } );
         }
       );
-    return rsvp;
   }
 
   ngOnInit(): void {

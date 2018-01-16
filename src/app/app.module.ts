@@ -8,10 +8,11 @@ import { AppComponent } from './app.component';
 
 import { EventsComponent } from './events/events.component';
 import { EventsListComponent } from './events/list.component';
-import { EventLocationComponent } from './event/location.component';
-import { EventImageComponent } from './events/eventimage.component';
-import { EventComponent } from './event/event.component';
+
 import { DetailsService } from './event/details.service';
+
+import { EventModule } from './event/event.module';
+// import { EventTestComponent } from './event/test.component';
 
 
 import { OverlayModule } from '@angular/cdk/overlay';
@@ -29,11 +30,8 @@ import { environment } from '../environments/environment';
 @NgModule({
   declarations: [
     AppComponent,
-    EventsComponent,
-    EventsListComponent,
-    EventComponent,
-    EventLocationComponent,
-    EventImageComponent,
+    // EventsComponent,
+    // EventsListComponent,
     OverlayComponent
   ],
   imports: [
@@ -41,6 +39,7 @@ import { environment } from '../environments/environment';
     HttpClientModule,
     MaterialModule,
     OverlayModule,
+    EventModule,
     ServiceWorkerModule.register( '/ngsw-worker.js', { enabled: environment.production } )
   ],
   providers: [

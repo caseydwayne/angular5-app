@@ -15,7 +15,8 @@ import { DetailsService } from '../event/details.service';
 /*
  * Assigns {events} from external data and creates related views
  */
-  // this.details.eventDetails( data, USER_ID )
+
+// this.details.eventDetails( data, USER_ID )
 
 export class EventsComponent implements OnInit {
 
@@ -40,9 +41,7 @@ export class EventsComponent implements OnInit {
       this.events_valid = true;
     } else {
       this.request.getEvents()
-        .pipe(
-          map( data => data )
-        ).subscribe(
+        .subscribe(
         data => {
           console.log(data);
           const etype = ( typeof this.events === 'object' );
