@@ -2,6 +2,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
+import 'rxjs/add/operator/retry';
 import { environment } from '../../environments/environment';
 import { MatSnackBar } from '@angular/material';
 
@@ -28,6 +29,7 @@ export class RequestService implements OnInit {
   private request( path: String, cb?: Function ) {
     const destination = API_URL + path;
     return this.http.get( destination, HTTP_OPTIONS )
+      .retry(2)
       .subscribe(
         data => {
           console.log( 'Found Data:', data );
@@ -54,15 +56,18 @@ export class RequestService implements OnInit {
     return this.request( 'events/' + event , cb );
   }
 
-  public checkStatus( event, user ) {
-    const s = this.getEvent( `${event}/status/${user}`, (result) => { console.log( 'Status:', result ); } );
-    return s;
+  public getStatus( eventid: string, user: string ) {
+    return this.http.get(
+      `${API_URL}events/${eventid}/status/${user}`,
+      HTTP_OPTIONS
+    );
   }
 
-  public changeStatus( event, user, value ) {
-    const rsvp = ( typeof value !== 'undefined' ? value : !this.checkStatus( event, user ) );
+  public updateStatus( event, user, value ) {
+    const rsvp = ( typeof value !== 'undefined' ? value : !this.getStatus( event, user ) );
     const data = { coming: rsvp, client_id: 'anything', client_secret: 'evalpass' };
     this.http.post( `${API_URL}events/${event}/status/${user}`, data, HTTP_OPTIONS )
+      .retry(3)
       .subscribe(
         response => {
           console.log( `Changed status of ${user} to ${rsvp}.` );

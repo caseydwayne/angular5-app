@@ -7,7 +7,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 
 import { EventsComponent } from './events/events.component';
+import { EventsListComponent } from './events/list.component';
+import { EventLocationComponent } from './event/location.component';
+import { EventImageComponent } from './events/eventimage.component';
 import { EventComponent } from './event/event.component';
+import { DetailsService } from './event/details.service';
+
 
 import { OverlayModule } from '@angular/cdk/overlay';
 import { OverlayComponent } from './overlay.component';
@@ -25,7 +30,10 @@ import { environment } from '../environments/environment';
   declarations: [
     AppComponent,
     EventsComponent,
+    EventsListComponent,
     EventComponent,
+    EventLocationComponent,
+    EventImageComponent,
     OverlayComponent
   ],
   imports: [
@@ -37,7 +45,8 @@ import { environment } from '../environments/environment';
   ],
   providers: [
     OverlayService,
-    RequestService
+    RequestService,
+    DetailsService
   ],
   entryComponents: [
     OverlayComponent

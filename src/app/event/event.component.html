@@ -4,12 +4,14 @@
   
   <h2>{{event.name}}</h2>
   
-  <p>Description of Event #{{event.id}}</p>
-  <p class="location">Location of Event #{{event.id}}</p>
+  <p>{{event.description}}</p>
+
 
   <!--  <blockquote>I'm Going: True</blockquote> -->
   <p>
-    <mat-slide-toggle checked=true>I'm Going!</mat-slide-toggle>
+    <mat-slide-toggle checked={{event.rsvp}}>
+      Going
+    </mat-slide-toggle>
   </p>
     
   <p>

@@ -1,17 +1,14 @@
 <div *ngIf="selected">
-  <!-- Selected: {{selected.name}}  --
-  <ng-template cdkPortal="overlayPortal">
-    
-  </ng-template>
-  !--
-  <div *cdkPortal="overlayPortal">
-  </div>  
+  
+  <!--
+    <div *cdkPortal="overlayPortal">
+    </div>  
   -->
+  
   <app-overlay>
     <app-event [event]="selected"></app-event>
   </app-overlay>
-  <!---->
-
+  
 </div>
 
 <section class="events">
@@ -20,34 +17,9 @@
     <h2>Loading Events...</h2>
   </div>
   
-  <mat-grid-list 
-    cols="{{width>1200?2:1}}" 
-    gutterSize="4rem" 
-    rowHeight="{{(width>640)?'2:1':((width<320)?'1:2':'1:1')}}"
-    >
-
-    <mat-grid-tile     
-      *ngFor="let event of events"
-      class="event-preview"              
-      (click)="onSelect(event)"
-      >
-    
-      <div class="backdrop" style="background-image: url(assets/event-thumbnail.jpg)"></div>
-      
-      <mat-grid-tile-header>{{event.name}}</mat-grid-tile-header>
-      
-      <div class="wrap">
-            
-        <div class="description">
-          <p>Lorum ipsum deloris santai fengue.</p>
-          <p class="location">Dragonfly, Alabama</p>
-        </div>        
-        
-      </div>
-      
-      <mat-grid-tile-footer>I'm Going!</mat-grid-tile-footer>
-    </mat-grid-tile>
-  
-  </mat-grid-list>
+  <div *ngIf="events_valid">
+    <h2>Found Events</h2>	
+    <app-events-list [events]="events"></app-events-list>
+  </div>  
   
 </section> 
