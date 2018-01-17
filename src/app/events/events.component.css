@@ -11,6 +11,7 @@
 
 
 mat-grid-tile { cursor: pointer; }
+mat-grid-tile-header { text-transform: capitalize; }
 mat-grid-tile-header, mat-grid-tile-footer { z-index: 2; }
 .event-preview .backdrop {
   position: absolute;

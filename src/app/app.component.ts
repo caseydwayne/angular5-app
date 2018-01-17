@@ -7,8 +7,11 @@ import { Component, AfterViewInit } from '@angular/core';
 })
 
 export class AppComponent implements AfterViewInit {
+
   title = 'Dragonfly API';
+
   public loading: (boolean) = true;
+
   ngAfterViewInit() {
      setTimeout( () => { this.loading = false; } );
   }

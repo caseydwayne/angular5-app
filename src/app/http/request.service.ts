@@ -41,7 +41,19 @@ export class RequestService implements OnInit {
    */
 
   public getEvents() {
-    return this.http.get( API_URL + 'events', HTTP_OPTIONS );
+    return this.http.get<Event[]>( API_URL + 'events', HTTP_OPTIONS );
+  }
+
+  /*
+   * @method getImage
+   * retrieves image from server based on event.id and event.images.id (media.id)
+   */
+
+  public getImage( eventid: string, mediaid: string ) {
+    return this.http.get(
+      `${API_URL}events/${eventid}/media/${mediaid}`,
+      HTTP_OPTIONS
+    );
   }
 
   /*

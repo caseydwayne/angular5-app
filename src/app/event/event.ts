@@ -15,4 +15,5 @@ export class EventFormatted {
   location: object;
   image: string;
   rsvp: boolean;
+  more: object;
 }

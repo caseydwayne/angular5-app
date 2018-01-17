@@ -1,11 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Event, EventFormatted } from '../event/event';
+
 // import { EVENTS } from '../data/mock-events';
 import { EVENT } from '../data/mock-event';
 import { HttpClient } from '@angular/common/http';
 import { RequestService } from '../http/request.service';
 import { DetailsService } from '../event/details.service';
-import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs/Observable';
+import { _do, scan, map, toArray  } from 'rxjs/operators';
+import { Scanner } from 'typescript';
+// import { } from 'lodash.map';
+
 
 @Component({
   selector: 'app-events',
@@ -26,10 +31,8 @@ export class EventsComponent implements OnInit {
     private details: DetailsService
   ) {}
 
-  public events;
+  public events: EventFormatted[];
   private events_valid: boolean;
-
-  getDetails = this.details.eventDetails;
 
   private selected: EventFormatted;
   onSelect(event: EventFormatted): void {
@@ -39,31 +42,29 @@ export class EventsComponent implements OnInit {
   ngOnInit () {
 
     const USER_ID = 'anything';
-    this.events_valid = false;
-
     const demo = false;
 
-    if ( demo ) {
-      this.events = [ this.getDetails( EVENT, USER_ID, true ) ];
-      this.events_valid = true;
+    if ( demo ) { this.events = [ this.details.eventDetails( EVENT, USER_ID, true ) ];
     } else {
-      this.request.getEvents()
+      return this.request.getEvents()
+        // .pipe( toArray )
+        // .map( evt => this.details.eventDetails( evt, USER_ID ) )
+
         .subscribe(
           data => {
-            console.log(data);
-            const etype = ( typeof this.events === 'object' );
-            if ( etype ) {
-              this.events = data;
-              this.events_valid = true;
-            } else {
-              this.events = {};
-              this.events_valid = false;
+            if ( typeof data !== 'object' ) {
+              return this.request.error('DragonFly API returned an invalid response.');
             }
+            // convert raw EventData to EventFormatted
+            data.forEach( evt => {
+              const e = this.details.eventDetails( evt, USER_ID );
+              return e;
+            });
+            console.log( 'Found data:', (data instanceof Array), data.length, data );
+            this.events = data as EventFormatted;
           },
           err => {
             this.request.error('DragonFly API unavailable/returned invalid response.');
-            this.events = {};
-            this.events_valid = false;
           }
         );
       }

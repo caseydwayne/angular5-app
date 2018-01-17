@@ -1,6 +1,8 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
+import { debounce, retry } from 'rxjs/operators';
+
 import { RequestService } from '../http/request.service';
 import { MatSnackBar } from '@angular/material';
 
@@ -32,13 +34,12 @@ export class DetailsService implements OnInit {
     more: {} // store extra data (comments, images) here, if needed
   };
 
-
   /*
    * @method eventData
    * replaces private event values with select raw values
    */
 
-  private eventData( event ) {
+  eventData( event ) {
     this.event.id = event.id;
     this.event.name = event.name;
     this.event.description = event.description;
@@ -48,12 +49,22 @@ export class DetailsService implements OnInit {
 
   /*
    * @method eventData
-   * retrieves image from api and replaces image property
-   * @todo create getImage method in RequestService
+   * retrieves image from API and replaces image property
    */
 
-  private eventImage ( event ) {
-    this.event.image = 'assets/event.jpg';
+  eventImage ( event ) {
+    let img = 'assets/event.jpg';
+    // disabled because 1) API provided img src attribute is wrong, 2) accuracy of API response is poo, consider using an API that works.
+    const fetch = false;
+    if ( fetch && !!event.images ) {
+      console.log( 'found event.images' );
+      if ( event.images && event.images[0].id  ) {
+        const img_id = event.images[0].id;
+        const req = this.request.getImage( event.id, img_id );
+        if ( typeof req === 'string' ) { img = req; }
+      }
+    }
+    this.event.image = img;
   }
 
 
@@ -62,12 +73,16 @@ export class DetailsService implements OnInit {
    * retrieves RSVP status for the provided USER_ID
    */
 
-  private eventStatus( event, user ) {
+  eventStatus( event, user ) {
     this.request.getStatus( event.id, user )
+      .retry(4)
       .subscribe(
         _user => {
-          console.log(_user);
-         // this.event.rsvp = ( _user.hasOwnProperty('coming') ? _user.coming : false )
+          // only accept { coming: <boolean> }
+          if ( typeof _user === 'object' && _user !== null ) {
+            if ( 'coming' in _user ) { this.event.rsvp = _user['coming']; }
+          }
+          // console.log( `Event: ${event.id} | User Status: ${this.event.rsvp}` );
         }
       );
   }

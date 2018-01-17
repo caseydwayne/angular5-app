@@ -20,7 +20,8 @@
     <mat-progress-bar mode="query"></mat-progress-bar>
   </div>
   
-  <div *ngIf="events_valid">    
+  <div *ngIf="events">    
+    <h2>Found Events!</h2>
     <mat-grid-list    
 	  cols="{{width>1200?2:1}}" 
 	  gutterSize="4rem" 
