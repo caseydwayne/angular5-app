@@ -24,7 +24,7 @@ export class EventsComponent implements OnInit {
     private details: DetailsService
   ) {}
 
-  public events: EventFormatted[];
+  public events;
   private events_valid: boolean;
 
   private selected: EventFormatted;
@@ -51,7 +51,7 @@ export class EventsComponent implements OnInit {
               return e;
             });
             // console.log( 'Found data:', (data instanceof Array), data.length, data );
-            this.events = data as EventFormatted;
+            this.events = data;
           },
           err => {
             this.request.error('DragonFly API unavailable/returned invalid response.');
