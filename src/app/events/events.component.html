@@ -1,14 +1,15 @@
 <div *ngIf="selected">
+  <!---->
   Selected Event: {{selected.name}}
-  <!--
+  <!----
     <div *cdkPortal="overlayPortal">
     </div>  
   
-  
+  <!----
   <app-overlay>
     <app-event [event]="selected"></app-event>
   </app-overlay>
-  -->
+  <!---->
 </div>
 
 <!---->
@@ -21,39 +22,41 @@
   
   <div *ngIf="events_valid">    
     <mat-grid-list    
-	cols="{{width>1200?2:1}}" 
-	gutterSize="4rem" 
-	rowHeight="{{(width>640)?'2:1':((width<320)?'1:2':'1:1')}}"
-	>
+	  cols="{{width>1200?2:1}}" 
+	  gutterSize="4rem" 
+	  rowHeight="{{(width>640)?'2:1':((width<320)?'1:2':'1:1')}}"
+	  >
 
-	<mat-grid-tile     
+      <mat-grid-tile     
 		*ngFor="let event of events"
 		class="event-preview"              
 		(click)="onSelect(event)"
 		>
 	
-		<div class="backdrop" style="background-image: url(assets/event-thumbnail.jpg)"></div>
+		  <div class="backdrop" style="background-image: url(assets/event-thumbnail.jpg)"></div>
 		
-		<mat-grid-tile-header>{{event.name}}</mat-grid-tile-header>
+		  <mat-grid-tile-header>{{event.name}}</mat-grid-tile-header>
 		
-		<div class="wrap">
+          <div class="wrap">
 					
 			<div class="description">
-				<p>{{ event.description | slice:0:32 }}...</p>
-				<app-event-location class="location" [event]="event"></app-event-location>
+			  <p>{{ event.description | slice:0:32 }}...</p>
+			  <app-event-location class="location" [event]="event"></app-event-location>
 			</div>        
 			
-		</div>
+		  </div>
 		
-		<mat-grid-tile-footer>
+		  <mat-grid-tile-footer>
 			<div *ngIf="event.rsvp; then going else details"></div>
 			<ng-template #going>I'm Going!</ng-template>
 			<ng-template #details>Event Details</ng-template>
-		</mat-grid-tile-footer>
-	</mat-grid-tile>
+		  </mat-grid-tile-footer>
+		  
+	  </mat-grid-tile>
 
-</mat-grid-list>
+    </mat-grid-list>
+    
   </div>
   
 </section>
- <!---->
+<!---->

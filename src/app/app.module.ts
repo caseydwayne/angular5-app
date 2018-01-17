@@ -7,7 +7,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 
 import { EventsComponent } from './events/events.component';
-import { EventsListComponent } from './events/list.component';
 
 import { DetailsService } from './event/details.service';
 

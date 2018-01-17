@@ -5,7 +5,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 
 import { EventsComponent } from './events.component';
-import { EventsListComponent } from './list.component';
 import { EventsTestComponent } from './test.component';
 
 import { EventModule } from '../event/event.module';
@@ -18,7 +17,6 @@ import { MaterialModule } from '../material.module';
 @NgModule({
   declarations: [
     EventsComponent,
-    EventsListComponent,
     EventsTestComponent
   ],
   imports: [
@@ -29,7 +27,6 @@ import { MaterialModule } from '../material.module';
   ],
   exports: [
     EventsComponent,
-    EventsListComponent,
     EventsTestComponent
   ],
   providers: [
