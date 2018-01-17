@@ -11,4 +11,4 @@ ul {
   background: #770000;
 }
 
-h2 { color: red}
+h2 { color: red; text-transform: capitalize; }

@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-// import { Event } from './event';
+import { Component, Input, AfterContentChecked } from '@angular/core';
+import { RequestService } from '../http/request.service';
+import { EventFormatted } from './event';
 
 @Component({
   selector: 'app-event',
@@ -7,24 +8,25 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./event.component.css']
 })
 
-export class EventComponent implements OnInit {
+export class EventComponent implements AfterContentChecked {
 
-  @Input('event') event; // : Event, disabled for now
+  constructor ( private request: RequestService ) {}
 
-  @Input('preview') preview: Boolean;
-
-  // private preview: Boolean;
-
-  private image: String;
+  @Input('event') event: EventFormatted;
 
   private message = encodeURI( 'View details at ' + location );
 
-  ngOnInit() {
-    this.event.image = 'assets/event.jpg';
-    // alert( this.preview || false );
-    // let img = 'assets/event';
-    // if ( this.preview ) { img += '-thumbnail'; }
-    // this.event.image = img + '.jpg';
+  async toggleStatus(event) {
+    const status = event.rsvp;
+    this.request.updateStatus( event.id );
+    this.event.rsvp = !status;
+    console.log( 'Event Status:', status );
+  }
+
+  ngAfterContentChecked() {
+    if ( !this.event.image ) {
+      this.event.image = 'assets/event.jpg';
+    }
   }
 
 }

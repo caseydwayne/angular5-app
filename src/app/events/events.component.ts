@@ -1,16 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Event, EventFormatted } from '../event/event';
-
-// import { EVENTS } from '../data/mock-events';
 import { EVENT } from '../data/mock-event';
 import { HttpClient } from '@angular/common/http';
 import { RequestService } from '../http/request.service';
 import { DetailsService } from '../event/details.service';
 import { Observable } from 'rxjs/Observable';
-import { _do, scan, map, toArray  } from 'rxjs/operators';
-import { Scanner } from 'typescript';
-// import { } from 'lodash.map';
-
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-events',
@@ -21,8 +16,6 @@ import { Scanner } from 'typescript';
 /*
  * Assigns {events} from external data and creates related views
  */
-
-// this.details.eventDetails( data, USER_ID )
 
 export class EventsComponent implements OnInit {
 
@@ -47,9 +40,6 @@ export class EventsComponent implements OnInit {
     if ( demo ) { this.events = [ this.details.eventDetails( EVENT, USER_ID, true ) ];
     } else {
       return this.request.getEvents()
-        // .pipe( toArray )
-        // .map( evt => this.details.eventDetails( evt, USER_ID ) )
-
         .subscribe(
           data => {
             if ( typeof data !== 'object' ) {
@@ -60,7 +50,7 @@ export class EventsComponent implements OnInit {
               const e = this.details.eventDetails( evt, USER_ID );
               return e;
             });
-            console.log( 'Found data:', (data instanceof Array), data.length, data );
+            // console.log( 'Found data:', (data instanceof Array), data.length, data );
             this.events = data as EventFormatted;
           },
           err => {

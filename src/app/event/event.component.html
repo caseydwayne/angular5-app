@@ -6,10 +6,28 @@
   
   <p>{{event.description}}</p>
 
-
-  <!--  <blockquote>I'm Going: True</blockquote> -->
+  <details>
+    <summary>Event Information</summary>
+    <div>
+      <p>Location: {{event.location.city}}, {{event.location.state}}</p>
+      <div *ngIf="event.more">
+        <div *ngIf="event.more.date">
+          <p>Date: {{event.more.date}}</p>
+        </div>
+        <div *ngIf="event.more.comments">
+          <p>Comments:</p>
+          <ul>          
+            <li *ngFor="let comment of event.more.comments">
+              Comment: {{comment.from}} says {{comment.text}}
+            </li> 
+          </ul>
+        </div>
+      </div>
+    </div>  
+  </details>
+  
   <p>
-    <mat-slide-toggle checked={{event.rsvp}}>
+    <mat-slide-toggle checked="{{event.rsvp}}" (click)="toggleStatus(event)">
       Going
     </mat-slide-toggle>
   </p>

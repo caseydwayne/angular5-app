@@ -28,7 +28,7 @@ export class RequestService implements OnInit {
     private snackBar: MatSnackBar
   ) {}
 
-  private results;
+  private user = 'anything';
 
 
   public error( message ) {
@@ -61,9 +61,9 @@ export class RequestService implements OnInit {
    * returns an observable containing UserStatus JSON ( { coming: <boolean> } )
    */
 
-  public getStatus( eventid: string, user: string ) {
+  public getStatus( event_id: string ) {
     return this.http.get(
-      `${API_URL}events/${eventid}/status/${user}`,
+      `${API_URL}events/${event_id}/status/${this.user}`,
       HTTP_OPTIONS
     );
   }
@@ -73,20 +73,19 @@ export class RequestService implements OnInit {
    * updates the UserStatus in the API by toggling existing boolean (or explicitly via the 'value' argument)
    */
 
-  public updateStatus( event, user, value?: boolean ) {
-    const rsvp = ( typeof value !== 'undefined' ? value : !this.getStatus( event, user ) );
+  public updateStatus( event_id: string, value?: boolean ) {
+    const rsvp = ( typeof value !== 'undefined' ? value : !this.getStatus( event_id ) );
     const data = { coming: rsvp };
-    return this.http.post( `${API_URL}events/${event}/status/${user}`, data, HTTP_OPTIONS )
-      .retry(3)
+    return this.http.post( `${API_URL}events/${event_id}/status/${this.user}`, data, HTTP_OPTIONS )
       .subscribe(
         response => {
-          console.log( `Changed status of ${user} to ${rsvp}.` );
+          console.log( `Changed status of ${this.user} to ${rsvp}.` );
           this.snackBar.open( 'RSVP Status Changed To ' + rsvp, 'OK', { panelClass: 'success' } );
           return response;
         },
         error => {
           console.log( 'Could not get change user status.', error );
-          this.snackBar.open( 'Could not change RSVP', 'OK', { panelClass: 'warn' } );
+          this.snackBar.open( 'Could not change RSVP : server denied access.', 'OK', { panelClass: 'warn' } );
         }
       );
   }

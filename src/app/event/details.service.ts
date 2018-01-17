@@ -73,8 +73,8 @@ export class DetailsService implements OnInit {
    * retrieves RSVP status for the provided USER_ID
    */
 
-  eventStatus( event, user ) {
-    this.request.getStatus( event.id, user )
+  eventStatus( event ) {
+    this.request.getStatus( event.id )
       .retry(4)
       .subscribe(
         _user => {
@@ -96,7 +96,7 @@ export class DetailsService implements OnInit {
     this.eventData( event );
     if ( !test ) {
       this.eventImage( event );
-      this.eventStatus( event, user );
+      this.eventStatus( event );
     }
     return this.event;
   }
