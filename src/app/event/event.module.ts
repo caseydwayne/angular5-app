@@ -25,6 +25,8 @@ import { MaterialModule } from '../material.module';
     MaterialModule
   ],
   exports: [
+    EventComponent,
+    EventLocationComponent,
     EventTestComponent
   ],
   providers: [

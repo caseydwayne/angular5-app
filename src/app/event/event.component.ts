@@ -9,9 +9,12 @@ import { Component, Input, OnInit } from '@angular/core';
 
 export class EventComponent implements OnInit {
 
-  @Input('event') event; // : Event, disabled for placeholder image
+  @Input('event') event; // : Event, disabled for now
+
   @Input('preview') preview: Boolean;
+
   // private preview: Boolean;
+
   private image: String;
 
   private message = encodeURI( 'View details at ' + location );

@@ -18,7 +18,7 @@
 					
 			<div class="description">
 				<p>{{ event.description | slice:0:32 }}...</p>
-				<app-event-location></app-event-location>
+				<app-event-location class="location" [event]="event"></app-event-location>
 			</div>        
 			
 		</div>

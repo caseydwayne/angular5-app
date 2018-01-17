@@ -38,11 +38,12 @@ export class DetailsService implements OnInit {
    * replaces private event values with select raw values
    */
 
-  eventData( event ) {
+  private eventData( event ) {
     this.event.id = event.id;
     this.event.name = event.name;
     this.event.description = event.description;
     this.event.location = event.location;
+    this.event.more = { date: event.date, ...event.comments, ...event.images };
   }
 
   /*
@@ -51,7 +52,7 @@ export class DetailsService implements OnInit {
    * @todo create getImage method in RequestService
    */
 
-  eventImage ( event ) {
+  private eventImage ( event ) {
     this.event.image = 'assets/event.jpg';
   }
 
@@ -61,7 +62,7 @@ export class DetailsService implements OnInit {
    * retrieves RSVP status for the provided USER_ID
    */
 
-  eventStatus( event, user ) {
+  private eventStatus( event, user ) {
     this.request.getStatus( event.id, user )
       .subscribe(
         _user => {
@@ -71,16 +72,17 @@ export class DetailsService implements OnInit {
       );
   }
 
-
   /*
    * @method eventDetails
    * accepts an Event and USER_ID. transforms raw Event from database into a more usable format.
    */
 
-  public eventDetails ( event, user ) {
+  public eventDetails ( event, user, test?: boolean ) {
     this.eventData( event );
-    this.eventImage( event );
-    this.eventStatus( event, user );
+    if ( !test ) {
+      this.eventImage( event );
+      this.eventStatus( event, user );
+    }
     return this.event;
   }
 

@@ -13,6 +13,6 @@ import { Event } from './event';
 
 export class EventLocationComponent {
 
-  @Input('event') event: Event;
+  @Input('event') event;
 
 }

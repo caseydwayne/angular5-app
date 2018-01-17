@@ -7,3 +7,12 @@ export class Event {
   images: object;
   comments: object;
 }
+
+export class EventFormatted {
+  id: string;
+  name: string;
+  description: string;
+  location: object;
+  image: string;
+  rsvp: boolean;
+}

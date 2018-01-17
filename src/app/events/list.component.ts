@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Event } from '../event/event';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { EventFormatted } from '../event/event';
 // import { EVENTS } from '../data/mock-events';
 import { EVENT } from '../data/mock-event';
 import { RequestService } from '../http/request.service';
@@ -12,14 +12,12 @@ import { RequestService } from '../http/request.service';
 
 export class EventsListComponent implements OnInit {
 
-  @Input('events') events;
-
-  selected: Event;
-
+  @Input('events') events: EventFormatted[];
+  @Output() selected = new EventEmitter<EventFormatted>();
   width = window.innerWidth;
 
-  onSelect(event: Event): void {
-    this.selected = event;
+  onSelect ( event ) {
+    this.selected.emit(event);
   }
 
   ngOnInit () {
