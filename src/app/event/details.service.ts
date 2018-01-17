@@ -56,11 +56,14 @@ export class DetailsService implements OnInit {
     let img = 'assets/event.jpg';
     // disabled because 1) API provided img src attribute is wrong, 2) accuracy of API response is poo, consider using an API that works.
     const fetch = false;
-    if ( fetch && !!event.images ) {
+    if ( fetch ) {
       console.log( 'found event.images' );
-      if ( event.images && event.images[0].id  ) {
+      if ( event.images && event.images[0] && event.images[0].id ) {
         const img_id = event.images[0].id;
         const req = this.request.getImage( event.id, img_id );
+        req.subscribe(
+          data => console.log(data)
+        );
         if ( typeof req === 'string' ) { img = req; }
       }
     }
