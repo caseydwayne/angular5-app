@@ -16,10 +16,9 @@ export class EventComponent implements AfterContentChecked {
 
   private message = encodeURI( 'View details at ' + location );
 
-  async toggleStatus(event) {
-    const status = event.rsvp;
-    this.request.updateStatus( event.id );
-    this.event.rsvp = !status;
+  toggleStatus() {
+    const status = !this.event.rsvp;
+    this.request.updateStatus( this.event, status );
     console.log( 'Event Status:', status );
   }
 

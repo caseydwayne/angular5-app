@@ -1,14 +1,20 @@
+  
 <div *ngIf="selected">
   <!----
   Selected Event: {{selected.name}}
   <!----
+  <ng-template [cdkPortalOutlet]="userSettingsPortal"></ng-template>
+
+  <div *cdkPortal="overlayPortal">
+  </div>
     <div *cdkPortal="overlayPortal">
     </div>  
-  
+  <app-event #overlayPortal [event]="selected"></app-event>
   <!----
   <app-overlay>
     <app-event [event]="selected"></app-event>
   </app-overlay>
+  <ng-template #overlay>TEST</ng-template>
   <!---->
   <app-event [event]="selected"></app-event>
 </div>
@@ -35,7 +41,9 @@
 		(click)="onSelect(event)"
 		>
 	
-		  <div class="backdrop" style="background-image: url(assets/event-thumbnail.jpg)"></div>
+		  <div class="backdrop" style="background-image: url(assets/event-thumbnail.jpg)">
+		    <img src="{{event.image}}" />
+		  </div>
 		
 		  <mat-grid-tile-header>{{event.name}}</mat-grid-tile-header>
 		
