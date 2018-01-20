@@ -26,7 +26,7 @@ const TYPE_FORM = { 'Content-Type': 'application/x-www-form-urlencoded' };
 const RES_ARRBUFF = { 'responseType': 'arraybuffer' };
 
 /*
- * The RequestService handles communication with the DragonFly API
+ * The RequestService handles communication with the Events API
  */
 
 @Injectable()

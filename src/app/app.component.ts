@@ -8,7 +8,7 @@ import { Component, AfterViewInit } from '@angular/core';
 
 export class AppComponent implements AfterViewInit {
 
-  title = 'Dragonfly API';
+  title = 'Angular5 App';
 
   public loading: (boolean) = true;
 
