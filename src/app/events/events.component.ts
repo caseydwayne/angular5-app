@@ -97,10 +97,8 @@ export class EventsComponent implements OnInit {
 
     const USER_ID = 'anything';
     const demo = true;
-
-    this.events = demo
-      ? [ this.details.eventDetails( EVENT, USER_ID, true ) ]
-      : this.listEvents( USER_ID );
+    if ( demo ) { this.request.demo_mode(); }
+    this.events = this.listEvents( USER_ID );
 
   }
 

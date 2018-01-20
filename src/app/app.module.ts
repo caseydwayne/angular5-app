@@ -6,6 +6,9 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 
+import { FakeBackendProvider } from './http/fake-backend.interceptor';
+import { JwtInterceptor } from './http/jwt.interceptor';
+
 import { EventsComponent } from './events/events.component';
 
 import { DetailsService } from './event/details.service';
@@ -14,8 +17,8 @@ import { EventModule } from './event/event.module';
 import { EventsModule } from './events/events.module';
 
 
-// import { OverlayModule } from '@angular/cdk/overlay';
-// import { OverlayComponent } from './overlay.component';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { OverlayComponent } from './overlay.component';
 import { OverlayService } from './overlay.service';
 
 import { RequestService } from './http/request.service';
@@ -28,25 +31,26 @@ import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
-    AppComponent
-    // , OverlayComponent
+    AppComponent,
+    OverlayComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     MaterialModule,
-    // OverlayModule,
+    OverlayModule,
     EventModule,
     EventsModule,
     ServiceWorkerModule.register( '/ngsw-worker.js', { enabled: environment.production } )
   ],
   providers: [
+    FakeBackendProvider,
     OverlayService,
     RequestService,
     DetailsService
   ],
   entryComponents: [
-    // OverlayComponent
+    OverlayComponent
   ],
   bootstrap: [ AppComponent ]
 })

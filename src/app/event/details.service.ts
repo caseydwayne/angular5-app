@@ -108,7 +108,7 @@ export class DetailsService implements OnInit {
 
   /*
    * @method eventStatus
-   * retrieves RSVP status for the provided USER_ID
+   * retrieves RSVP status for the provided event
    */
 
   eventStatus( event ) {

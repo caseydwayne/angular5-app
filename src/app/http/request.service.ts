@@ -1,7 +1,8 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/from';
 // import 'rxjs/add/operator/retry';
 // import { debounce, retry, retryWhen, delay, take } from 'rxjs/operators';
 import 'rxjs/add/operator/delay';
@@ -11,6 +12,7 @@ import 'rxjs/add/operator/retryWhen';
 import { environment } from '../../environments/environment';
 import { MatSnackBar } from '@angular/material';
 import { EventFormatted } from '../event/event';
+import { EVENT } from '../data/mock-event';
 
 // const API_URL = environment.api_url;
 const API_URL = 'http://dev.dragonflyathletics.com:1337/api/dfkey/';
@@ -26,7 +28,7 @@ const TYPE_FORM = { 'Content-Type': 'application/x-www-form-urlencoded' };
 const RES_ARRBUFF = { 'responseType': 'arraybuffer' };
 
 /*
- * The RequestService handles communication with the DragonFly API
+ * The RequestService handles communication with the Event API
  */
 
 @Injectable()
@@ -39,6 +41,10 @@ export class RequestService implements OnInit {
 
   private user = 'anything';
 
+  private demo = false;
+  public demo_mode () {
+    this.demo = true;
+  }
 
   public error( message, prompt?: string ) {
     return this.snackBar.open( message, prompt || 'OK', { panelClass: 'error' } );
@@ -50,6 +56,9 @@ export class RequestService implements OnInit {
    */
 
   public getEvents() {
+    if ( this.demo ) {
+      return Observable.of( { 0: EVENT } );
+    }
     return this.http.get<Event[]>(
       API_URL + 'events',
       {
@@ -64,6 +73,9 @@ export class RequestService implements OnInit {
    */
 
   public getImage( eventid: string, mediaid: string ) {
+    if ( this.demo ) {
+      return Observable.of('assets/event.jpg');
+    }
     return this.http.get(
       `${API_URL}events/${eventid}/media/${mediaid}`,
       {
@@ -83,6 +95,9 @@ export class RequestService implements OnInit {
    */
 
   public getStatus( event: EventFormatted ) {
+    if ( this.demo ) {
+      return Observable.of({ coming: true });
+    }
     return this.http.get(
       `${API_URL}events/${event.id}/status/${this.user}`,
       {
@@ -101,6 +116,9 @@ export class RequestService implements OnInit {
   public updateStatus( event: EventFormatted, value?: boolean ) {
     const rsvp = ( typeof value !== 'undefined' ? value : !this.getStatus( event ) );
     const data = { coming: rsvp };
+    if ( this.demo ) {
+      return Observable.of( data );
+    }
     return this.http.put(
       `${API_URL}events/${event.id}/status/${this.user}`,
       data,
