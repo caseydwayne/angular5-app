@@ -16,15 +16,15 @@ describe('AppComponent', () => {
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
   }));
-  it(`should have as title 'Dragonfly API'`, async(() => {
+  it(`should have as title 'Angular5 App'`, async(() => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('Dragonfly API');
+    expect(app.title).toEqual('Angular5 App');
   }));
   it('should render title in a h1 tag', async(() => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Dragonfly API');
+    expect(compiled.querySelector('h1').textContent).toContain('Angular5 App');
   }));
 });

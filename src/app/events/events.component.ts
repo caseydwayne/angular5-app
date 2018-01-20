@@ -35,7 +35,9 @@ export class EventsComponent implements OnInit {
   private tries = 0;
   private retry = false;
 
-  private selected: EventFormatted;
+  public width = window.innerWidth;
+
+  public selected: EventFormatted;
   onSelect(event: EventFormatted): void {
     this.selected = event;
   }
@@ -54,7 +56,7 @@ export class EventsComponent implements OnInit {
         data => {
           // retry if response is not valid JSON
           if ( typeof data !== 'object' ) {
-            type_err = this.request.error('DragonFly API returned an invalid response. Retrying...');
+            type_err = this.request.error('Events API returned an invalid response. Retrying...');
             return this.listEvents();
           }
           // convert raw EventData to EventFormatted
@@ -72,12 +74,12 @@ export class EventsComponent implements OnInit {
           // retry if API is unavailable
           this.tries++;
           if ( this.tries < max_tries ) {
-            this.request.error('DragonFly API is unavailable. Retrying.');
+            this.request.error('Events API is unavailable. Retrying.');
             this.listEvents();
           } else {
             const msg = this.retry
               ? 'Please check your connection and try again.'
-              : 'The DragonFly API is currently unavailable.';
+              : 'The Events API is currently unavailable.';
             const snack = this.request.error( msg, 'Retry' );
             snack.onAction().subscribe(
               () => {

@@ -14,9 +14,9 @@ export class EventComponent implements AfterContentChecked {
 
   @Input('event') event: EventFormatted;
 
-  private message = encodeURI( 'View details at ' + location );
+  public message = encodeURI( 'View details at ' + location );
 
-  toggleStatus() {
+  public toggleStatus() {
     const status = !this.event.rsvp;
     this.request.updateStatus( this.event, status );
     console.log( 'Event Status:', status );
