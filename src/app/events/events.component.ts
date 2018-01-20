@@ -94,7 +94,7 @@ export class EventsComponent implements OnInit {
   ngOnInit () {
 
     const USER_ID = 'anything';
-    const demo = !true;
+    const demo = true;
 
     this.events = demo
       ? [ this.details.eventDetails( EVENT, USER_ID, true ) ]
