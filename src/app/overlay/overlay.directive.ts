@@ -1,44 +1,15 @@
-import { Directive, HostListener, Input, Output } from '@angular/core';
-import { OverlayService } from './overlay.service';
+import { Directive, OnInit, ViewContainerRef } from '@angular/core';
+// import { OverlayDirective } from './overlay.directive';
 
 @Directive({
   selector: '[appOverlay]'
 })
 
-export class OverlayDirective {
+export class OverlayDirective implements OnInit {
+  // @Input('event') event;
+  constructor( private viewContainerRef: ViewContainerRef ) { }
 
-  constructor( private overlay: OverlayService ) { }
-
-  @Input('clickedOutside') clickedOutside;
-
-  @Output()
-  open() {
-    this.overlay.open();
-    console.log( 'Opened Overlay Portal' );
-  }
-
-  @Output()
-  close() {
-    this.overlay.close();
-  }
-
-  onClickedOutside() {
-    console.log( 'clicked outside(directive)' );
-    this.overlay.close();
-  }
-
-  @HostListener('document:keydown', ['$event']) private handleKeydown(event: KeyboardEvent) {
-    const key = event.keyCode;
-    // console.log( 'keydown', key );
-    if ( key === 27 ) {
-      this.close();
-    }
-  }
-
-  @HostListener('document:click', ['$event']) private handleClick(event: MouseEvent) {
-    // const t = event.target;
-    // !$(event.target).closest('#overlay *').length;
-    // console.log(t);
-  }
+  ngOnInit () {}
 
 }
+

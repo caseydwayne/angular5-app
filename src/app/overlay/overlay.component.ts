@@ -1,15 +1,24 @@
-import { Component, OnInit, Input } from '@angular/core';
-// import { OverlayService } from './overlay.service';
-// import { OverlayDirective } from './overlay.directive';
+import {
+  Component,
+  ComponentFactoryResolver,
+  Input,
+  Output,
+  HostListener,
+  ViewChild,
+  OnInit,
+  AfterViewInit
+} from '@angular/core';
+import { OverlayService } from './overlay.service';
+import { OverlayDirective } from './overlay.directive';
 
 @Component({
   selector: 'app-overlay',
   template: `
-    <div id="#overlay" appOverlay (clickOutside)="close()">
+    <div id="#overlay" (clickOutside)="onClickedOutside($event)">
       <div class="overlay">
         <h2>Overlay</h2>
         <!--<app-event [event]="this.event"></app-event>-->
-        <ng-template overlay></ng-template>
+        <ng-template appOverlay></ng-template>
       </div>
     </div>
   `,
@@ -20,15 +29,54 @@ import { Component, OnInit, Input } from '@angular/core';
   ]
 })
 
-export class OverlayComponent implements OnInit {
-  // @Input('event') event;
+export class OverlayComponent implements OnInit, AfterViewInit {
 
-  constructor () {}
+  @Input('content') content;
+
+  @ViewChild(OverlayDirective) contentWrapper: OverlayDirective;
+
+  constructor(
+    private overlay: OverlayService,
+    private resolver: ComponentFactoryResolver
+  ) { }
+
+  @Input('clickedOutside') clickedOutside;
+
+  loadContents ( component, data? ) {
+    const componentFactory = this.resolver
+      .resolveComponentFactory( component.component );
+    const viewContainerRef = this.contentWrapper.viewContainerRef;
+    viewContainerRef.clear();
+    const componentRef = viewContainerRef.createComponent(componentFactory);
+    (componentRef.instance).data = data;
+  }
+
+  @Output()
+  open( component, data?: any ) {
+    this.overlay.open( component, data );
+    // this.loadContents( component, data );
+    console.log( 'Opened Overlay Portal' );
+  }
+
+  @Output()
+  close() {
+    this.overlay.close();
+  }
 
   onClickedOutside() {
-    console.log( 'clicked outside (component)' );
-    // onClickedOutside($event)
-    return this.onClickedOutside;
+    console.log( 'clicked outside(directive)' );
+    this.overlay.close();
+  }
+
+  @HostListener('document:keydown', ['$event']) private handleKeydown(event: KeyboardEvent) {
+    const key = event.keyCode;
+    if ( key === 27 ) {
+      this.close();
+    }
+  }
+
+  ngAfterViewInit() {
+    // this.loadContents();
   }
 
   ngOnInit () {}

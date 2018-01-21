@@ -16,8 +16,8 @@ import { EventFormatted } from '../event/event';
 import { EVENT } from '../data/mock-event';
 
 // const API_URL = environment.api_url;
-const API_URL = 'http://dev.dragonflyathletics.com:1337/api/dfkey/';
-// const API_URL = '/api/'; // attempting proxy to access images
+// const API_URL = 'http://dev.dragonflyathletics.com:1337/api/dfkey/';
+const API_URL = '/api/'; // using a proxy to bypass same-origin errors
 
 const AUTH = { 'Authorization': 'Basic YW55dGhpbmc6ZXZhbHBhc3M=' };
 

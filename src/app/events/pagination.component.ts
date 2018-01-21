@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Event, EventFormatted } from '../event/event';
 import { EVENT } from '../data/mock-event';
-import { EventComponent } from '../event/event.component';
 import { HttpClient } from '@angular/common/http';
 import { JsonpModule, Jsonp, Response } from '@angular/http';
 import { RequestService } from '../http/request.service';
@@ -41,7 +40,6 @@ export class EventsComponent implements OnInit {
   public selected: EventFormatted;
   onSelect(event: EventFormatted): void {
     this.selected = event;
-    this.overlay.open( EventComponent, event );
   }
 
   /*

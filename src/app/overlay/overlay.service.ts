@@ -1,5 +1,5 @@
 import { Injectable, HostListener } from '@angular/core';
-import { OverlayComponent } from './overlay.component';
+// import { OverlayComponent } from './overlay.component';
 import { OverlayModule, Overlay } from '@angular/cdk/overlay';
 import { PortalModule, ComponentPortal } from '@angular/cdk/portal';
 
@@ -11,15 +11,16 @@ export class OverlayService {
   private overlayRef = null;
   private portal = null;
 
-  open() {
-    // alert( 'opening overlay' );
+  open( component, data?: any ) {
+    // create new overlay and store reference
     if ( !this.overlayRef ) {
       this.overlayRef = this.overlay.create();
     }
     const ref = this.overlayRef;
-    const portal = new ComponentPortal(OverlayComponent);
+    // dynamically attach component to portal
+    const portal = new ComponentPortal(component);
     this.portal = portal;
-    ref.attach(portal);
+    ref.attach( portal );
     console.log( 'Opened Overlay Portal' );
   }
 
