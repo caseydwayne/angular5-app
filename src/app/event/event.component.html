@@ -1,6 +1,6 @@
 <div class="event">
 
-  <img src="{{event.image}}" alt="{{event.name}}" />
+  <img [src]="event.image" alt="{{event.name}}" />
   
   <h2>{{event.name}}</h2>
   
@@ -12,7 +12,7 @@
       <p>Location: {{event.location.city}}, {{event.location.state}}</p>
       <div *ngIf="event.more">
         <div *ngIf="event.more.date">
-          <p>Date: {{event.more.date}}</p>
+          <p>Date: {{event.more.date | date:'mm/dd/y'}}</p>
         </div>
         <div *ngIf="event.more.comments">
           <p>Comments:</p>
@@ -27,7 +27,7 @@
   </details>
   
   <p>
-    <mat-slide-toggle checked="{{event.rsvp}}" (click)="toggleStatus()">
+    <mat-slide-toggle [checked]="event.rsvp" (click)="toggleStatus(event)">
       Going
     </mat-slide-toggle>
   </p>

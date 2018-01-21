@@ -1,17 +1,19 @@
-<div class="mat-app-background mat-typography">
+<div id="wrap" class="mat-app-background mat-typography">
 	
   <div *ngIf="loading">
     <mat-progress-bar mode="buffer" value=10 bufferValue=50></mat-progress-bar>
   </div>
 	
-  <h1 class="page-title">{{title}}</h1>
-	
-  <p>This is a sample SPA created with Angular 5.</p>
+  <div class="center p2e pb0">
+    <h1 class="page-title">{{title}}</h1>
+    <p class="note">Loads Events, Toggles RSVP</p>
+  </div>	 
 
   <app-events></app-events>
-  
+    
 <!-- 	
-  
+
+  <router-outlet></router-outlet>
   <app-overlay>Test Content</app-overlay>
   <app-events></app-events>
   <app-events-test></app-events-test>

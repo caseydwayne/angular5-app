@@ -5,6 +5,7 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/from';
 // import 'rxjs/add/operator/retry';
 // import { debounce, retry, retryWhen, delay, take } from 'rxjs/operators';
+import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/retry';
@@ -57,7 +58,7 @@ export class RequestService implements OnInit {
 
   public getEvents() {
     if ( this.demo ) {
-      return Observable.of( { 0: EVENT } );
+      return Observable.of( EVENT ).map(o => JSON.stringify(o));
     }
     return this.http.get<Event[]>(
       API_URL + 'events',
@@ -96,7 +97,7 @@ export class RequestService implements OnInit {
 
   public getStatus( event: EventFormatted ) {
     if ( this.demo ) {
-      return Observable.of({ coming: true });
+      return Observable.of({ coming: event.rsvp });
     }
     return this.http.get(
       `${API_URL}events/${event.id}/status/${this.user}`,
@@ -108,16 +109,32 @@ export class RequestService implements OnInit {
     );
   }
 
+  private statusChanged ( event, rsvp ) {
+    event.rsvp = rsvp;
+    console.log( `Changed user status of "${this.user}" to ${rsvp}.` );
+    const msg = rsvp ? '"Going"' : '"Not Going"';
+    this.snackBar.open( 'RSVP Status Changed To ' + msg, 'OK', { panelClass: 'success' } );
+  }
+
+  private statusError ( error ) {
+    console.log( 'Could not get change user status.', error );
+    this.snackBar.open( 'Could not change RSVP : server denied access.', 'OK', { panelClass: 'warn' } );
+  }
+
   /*
    * @method updateStatus
    * updates the UserStatus in the API by toggling existing boolean (or explicitly via the 'value' argument)
    */
 
-  public updateStatus( event: EventFormatted, value?: boolean ) {
-    const rsvp = ( typeof value !== 'undefined' ? value : !this.getStatus( event ) );
+  public updateStatus( event: EventFormatted, value: boolean ) {
+    const rsvp = value;
     const data = { coming: rsvp };
     if ( this.demo ) {
-      return Observable.of( data );
+      return Observable.of( data )
+        .subscribe(
+          () => this.statusChanged( event, rsvp ),
+          this.statusError
+        );
     }
     return this.http.put(
       `${API_URL}events/${event.id}/status/${this.user}`,
@@ -129,16 +146,8 @@ export class RequestService implements OnInit {
       })
       .retryWhen ( errors => errors.delay(1000).take(10) )
       .subscribe(
-        response => {
-          console.log( `Changed user status of "${this.user}" to ${rsvp}.` );
-          const msg = rsvp ? '"Going"' : '"Not Going"';
-          this.snackBar.open( 'RSVP Status Changed To ' + msg, 'OK', { panelClass: 'success' } );
-          event.rsvp = rsvp;
-        },
-        error => {
-          console.log( 'Could not get change user status.', error );
-          this.snackBar.open( 'Could not change RSVP : server denied access.', 'OK', { panelClass: 'warn' } );
-        }
+        () => this.statusChanged( event, rsvp ),
+        this.statusError
       );
   }
 

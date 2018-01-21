@@ -1,3 +1,5 @@
+import { SafeStyle, SafeUrl } from '@angular/platform-browser';
+
 export class Event {
   id: string;
   name: string;
@@ -13,7 +15,8 @@ export class EventFormatted {
   name: string;
   description: string;
   location: object;
-  image: string;
+  image: SafeUrl | string;
+  thumbnail: SafeStyle | string;
   rsvp: boolean;
   more: object;
 }
