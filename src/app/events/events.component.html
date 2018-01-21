@@ -15,7 +15,9 @@
   </app-overlay>
   <ng-template #overlay>TEST</ng-template>
   <!---->
+  
   <app-event [event]="selected"></app-event>
+  
 </div>
 
 <!---->
@@ -40,9 +42,7 @@
 		(click)="onSelect(event)"
 		>
 	
-		  <div class="backdrop" style="background-image: url(assets/event-thumbnail.jpg)">
-		    <img src="{{event.image}}" />
-		  </div>
+		  <div class="backdrop" [style.background-image]="event.thumbnail"></div>
 		
 		  <mat-grid-tile-header>{{event.name}}</mat-grid-tile-header>
 		

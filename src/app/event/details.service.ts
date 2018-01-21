@@ -1,5 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/retry';
 import { RequestService } from '../http/request.service';
@@ -13,6 +14,7 @@ import { MatSnackBar } from '@angular/material';
 export class DetailsService implements OnInit {
 
   constructor(
+    private sanitizer: DomSanitizer,
     private request: RequestService,
     private snackBar: MatSnackBar
   ) {}
@@ -29,6 +31,7 @@ export class DetailsService implements OnInit {
     description: 'Descriptive text describing event.',
     location: { city: 'Knoxville', state: 'Tennessee' },
     image: 'assets/event.jpg',
+    thumbnail: 'assets/event-thumbnail.jpg',
     rsvp: true,
     more: {} // store extra data (comments, images) here, if needed
   };
@@ -46,7 +49,7 @@ export class DetailsService implements OnInit {
     this.event.name = event.name;
     this.event.description = event.description;
     this.event.location = event.location;
-    this.event.more = { date: event.date, ...event.comments, ...event.images };
+    this.event.more = { date: new Date( event.date ), ...event.comments, ...event.images };
   }
 
   /*
@@ -70,9 +73,10 @@ export class DetailsService implements OnInit {
    */
 
   eventImage ( event ) {
-    let img = 'assets/event.jpg';
+    const img_default = this.event.image;
+    let img = this.sanitizer.bypassSecurityTrustUrl(img_default);
     // disabled because 1) API provided img src attribute is wrong, 2) accuracy of API response is poo, consider using an API that works.
-    const fetch = true;
+    const fetch = false;
     if ( fetch ) {
       console.log( 'found event.images', event.images );
       if ( event.images && event.images[0] && event.images[0].id ) {
@@ -94,7 +98,8 @@ export class DetailsService implements OnInit {
         );
       }
     }
-    this.event.image = img;
+    this.event.image = img as string;
+    this.event.thumbnail = this.sanitizer.bypassSecurityTrustStyle(`url(${img_default})`) as string;
   }
 
   /*

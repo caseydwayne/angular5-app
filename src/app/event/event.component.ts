@@ -10,22 +10,21 @@ import { EventFormatted } from './event';
 
 export class EventComponent implements AfterContentChecked {
 
-  constructor ( private request: RequestService ) {}
+  constructor (
+    private request: RequestService,
+  ) {}
 
   @Input('event') event: EventFormatted;
 
   public message = encodeURI( 'View details at ' + location );
 
-  public toggleStatus() {
-    const status = !this.event.rsvp;
-    this.request.updateStatus( this.event, status );
-    console.log( 'Event Status:', status );
+  public toggleStatus(event) {
+    const status = !event.rsvp;
+    this.request.updateStatus( event, status );
   }
 
   ngAfterContentChecked() {
-    if ( !this.event.image ) {
-      this.event.image = 'assets/event.jpg';
-    }
+    // if ( !this.event.image ) { this.event.image = 'assets/event.jpg'; }
   }
 
 }
