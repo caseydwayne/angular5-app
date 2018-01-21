@@ -41,7 +41,7 @@ export class EventsComponent implements OnInit {
   public selected: EventFormatted;
   onSelect(event: EventFormatted): void {
     this.selected = event;
-    this.overlay.open( EventComponent, event );
+    // this.overlay.open( EventComponent, event );
   }
 
   /*

@@ -20,6 +20,6 @@ export class AppComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     setTimeout( () => { this.loading = false; } );
-    this.overlay.open( OverlayComponent );
+    // this.overlay.open( OverlayComponent );
   }
 }

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { UserService } from './service';
+import { UserUserService } from './user.service';
 
 import { MatSnackBar } from '@angular/material';
 
@@ -17,7 +17,7 @@ export class RegisterComponent {
 
   constructor(
     private router: Router,
-    private userService: UserService,
+    private userService: UserUserService,
     private snackBar: MatSnackBar
   ) { }
 

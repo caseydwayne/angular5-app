@@ -6,15 +6,14 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FakeBackendProvider } from './http/fake-backend.interceptor';
 
 import { AppComponent } from './app.component';
+
+// import { UserModule } from './user/user.module';
+
 import { routing } from './routing';
 
 import { JwtInterceptor } from './http/jwt.interceptor';
 import { AuthGuard } from './http/authguard';
 import { AuthenticationService } from './http/authentication.service';
-
-import { UserService } from './user/service';
-import { LoginComponent } from './user/login.component';
-import { RegisterComponent } from './user/register.component';
 
 import { EventsComponent } from './events/events.component';
 
@@ -40,6 +39,7 @@ import { environment } from '../environments/environment';
   imports: [
     BrowserModule,
     HttpClientModule,
+    // UserModule,
     // routing,
     MaterialModule,
     OverlayProvider,
