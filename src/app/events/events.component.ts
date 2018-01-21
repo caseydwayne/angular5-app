@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { JsonpModule, Jsonp, Response } from '@angular/http';
 import { RequestService } from '../http/request.service';
 import { DetailsService } from '../event/details.service';
-import { OverlayService } from '../overlay.service';
+import { OverlayService } from '../overlay/overlay.service';
 import { Observable } from 'rxjs/Observable';
 import { map, retry, take } from 'rxjs/operators';
 import 'rxjs/add/operator/take';

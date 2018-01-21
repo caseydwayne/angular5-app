@@ -9,19 +9,26 @@ export class OverlayService {
   constructor( private overlay: Overlay ) { }
 
   private overlayRef = null;
+  private portal = null;
 
-  openOverlay() {
+  open() {
+    // alert( 'opening overlay' );
     if ( !this.overlayRef ) {
       this.overlayRef = this.overlay.create();
     }
     const ref = this.overlayRef;
     const portal = new ComponentPortal(OverlayComponent);
+    this.portal = portal;
     ref.attach(portal);
-    console.log( 'Opened Overlay' );
+    console.log( 'Opened Overlay Portal' );
   }
 
-  closeOverlay() {
-    console.log( 'Closing Portal' );
+  close() {
+    console.log( 'Closing Overlay Portal' );
+    if ( this.overlayRef && this.overlayRef.detach ) {
+      this.overlayRef.detach();
+      this.overlayRef = null;
+    }
   }
 
 }
