@@ -19,9 +19,9 @@ export class EventsTestComponent implements OnInit {
     private details: DetailsService
   ) {}
 
-  private events: EventFormatted[];
+  public events: EventFormatted[];
   private events_valid: boolean;
-  private selected: EventFormatted;
+  public selected: EventFormatted;
 
   onSelect ( event ) {
     this.selected = event;
@@ -37,7 +37,7 @@ export class EventsTestComponent implements OnInit {
     const mock = this.details.eventDetails( EVENT, USER_ID, true );
 
     this.events = [ mock ];
-
+ 
     this.events_valid = true;
 
   }

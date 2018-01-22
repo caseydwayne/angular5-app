@@ -1,6 +1,6 @@
 import { SafeStyle, SafeUrl } from '@angular/platform-browser';
 
-export class Event {
+export interface Event {
   id: string;
   name: string;
   description: string;
@@ -10,7 +10,7 @@ export class Event {
   comments: object;
 }
 
-export class EventFormatted {
+export interface EventFormatted {
   id: string;
   name: string;
   description: string;
@@ -19,4 +19,5 @@ export class EventFormatted {
   thumbnail: SafeStyle | string;
   rsvp: boolean;
   more: object;
+  ready: boolean;
 }

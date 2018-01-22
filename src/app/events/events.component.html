@@ -2,9 +2,10 @@
   <!----
   Selected Event: {{selected.name}}
   <!---->
-  <app-event [event]="selected"></app-event>
+  <app-event [event]="selected"></app-event>  
 </div>
 
+    
 <!---->
 <section class="events">
 
@@ -29,15 +30,31 @@
 	
 		  <div class="backdrop" [style.background-image]="event.thumbnail"></div>
 		
-		  <mat-grid-tile-header>{{event.name}}</mat-grid-tile-header>
+		  <mat-grid-tile-header>
+		    {{event.name}}
+		  </mat-grid-tile-header>
 		
           <div class="wrap">
-					
+            		
 			<div class="description">
 			  <p>{{ event.description | slice:0:32 }}...</p>
 			  <app-event-location class="location" [event]="event"></app-event-location>
-			</div>        
+			</div>        			
 			
+			<ng-template ngIf="!event.ready">
+		      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+		    </ng-template>
+		    
+		    <div *ngIf="event.more | async">
+		      <div *ngIf="event.more.images; else noImages | async">
+                <div *ngFor="let img of event.more.images | async">
+                  <p>{{img.id}}</p>
+                  <img (src)="img.src" />                  
+                </div>
+              </div>
+              <ng-template #noImages>No Images Found</ng-template>
+            </div>
+            		        
 		  </div>
 		
 		  <mat-grid-tile-footer>
@@ -45,6 +62,8 @@
 			<ng-template #going>I'm Going!</ng-template>
 			<ng-template #details>Event Details</ng-template>			
 		  </mat-grid-tile-footer>
+		  <div *ngIf="event.more">
+  </div>
 		  
 	  </mat-grid-tile>
 

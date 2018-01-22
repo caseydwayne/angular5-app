@@ -60,7 +60,7 @@ export class RequestService implements OnInit {
     if ( this.demo ) {
       return Observable.of( EVENT ).map(o => JSON.stringify(o));
     }
-    return this.http.get<Event[]>(
+    return this.http.get(
       API_URL + 'events',
       {
         headers: new HttpHeaders({ ...TYPE_PLAIN, ...AUTH })
@@ -75,8 +75,11 @@ export class RequestService implements OnInit {
 
   public getImage( eventid: string, mediaid: string ) {
     if ( this.demo ) {
-      return Observable.of('assets/event.jpg');
+      return `${API_URL}events/${eventid}/media/${mediaid}`;
+      // return Observable.of('assets/event.jpg');
     }
+    return `${API_URL}events/${eventid}/media/${mediaid}`;
+    /*
     return this.http.get(
       `${API_URL}events/${eventid}/media/${mediaid}`,
       {
@@ -88,6 +91,7 @@ export class RequestService implements OnInit {
          responseType: 'text'
       }
     );
+    */
   }
 
   /*

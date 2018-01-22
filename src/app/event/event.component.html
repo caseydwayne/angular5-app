@@ -5,7 +5,16 @@
   <h2>{{event.name}}</h2>
   
   <p>{{event.description}}</p>
-  <span>{{event.rsvp?'yes':'no'}}</span>
+  
+  <div *ngIf="event.more; else noImages">
+    <div *ngIf="event.more.images">
+      <div *ngFor="let img of event.more.images">
+        <img (src)="img.src" />
+      </div>
+    </div>
+  </div>
+  <ng-template #noImages>No Images Found</ng-template>
+  
   <details>
     <summary>Event Information</summary>
     <div>

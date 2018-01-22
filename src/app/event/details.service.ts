@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/retry';
 import { RequestService } from '../http/request.service';
 import { MatSnackBar } from '@angular/material';
+import { EventFormatted } from './event';
 
 /*
  * Creates valid "Event" object for /event/* components
@@ -19,25 +20,33 @@ export class DetailsService implements OnInit {
     private snackBar: MatSnackBar
   ) {}
 
-  /*
-   * @property event
-   * all {event} require the following schema to work with event.component and events/list.component
-   * @private
-   */
-
-  private event = {
-    id: 'uniqueidstring',
-    name: 'Event Name',
-    description: 'Descriptive text describing event.',
-    location: { city: 'Knoxville', state: 'Tennessee' },
-    image: 'assets/event.jpg',
-    thumbnail: 'assets/event-thumbnail.jpg',
-    rsvp: true,
-    more: {} // store extra data (comments, images) here, if needed
-  };
+  private event: Observable<EventFormatted>;
 
   private events_loaded = 0;
   private events_max = 2;
+
+  /*
+   * @method eventFormat
+   * all {event} require the following schema to work with event.component and events/list.component
+   */
+
+  eventFormat () {
+    return Observable.of({
+      id: 'uniqueidstring',
+      name: 'Event Name',
+      description: 'Descriptive text describing event.',
+      location: { city: 'Knoxville', state: 'Tennessee' },
+      image: 'assets/event.jpg',
+      thumbnail: 'assets/event-thumbnail.jpg',
+      rsvp: true,
+      more: {
+        images: [],
+        comments: [],
+        date: new Date()
+      }, // store extra data (comments, images) here, if needed
+      ready: false
+    });
+  }
 
   /*
    * @method eventData
@@ -45,11 +54,19 @@ export class DetailsService implements OnInit {
    */
 
   eventData( event ) {
-    this.event.id = event.id;
-    this.event.name = event.name;
-    this.event.description = event.description;
-    this.event.location = event.location;
-    this.event.more = { date: new Date( event.date ), ...event.comments, ...event.images };
+    this.event.subscribe(
+      evt => {
+        evt.id = event.id;
+        evt.name = event.name;
+        evt.description = event.description;
+        evt.location = event.location;
+        evt.more = {
+          date: new Date( event.date ),
+          comments: event.comments,
+          images: event.images
+        };
+      }
+    );
   }
 
   /*
@@ -69,40 +86,43 @@ export class DetailsService implements OnInit {
 
   /*
    * @method eventData
-   * retrieves image from API and replaces image property
+   * converts image path to TrustUrl for (src)="<TrustUrl>"
    */
 
-  eventImage ( event ) {
-    const img_default = this.event.image;
-    console.log( `found ${img_default} for ${event.id}` );
-    let img = this.sanitizer.bypassSecurityTrustUrl(img_default);
-    // disabled because 1) API provided img src attribute is wrong, 2) accuracy of API response is poo, consider using an API that works.
-    const fetch = false;
-    if ( fetch ) {
-      console.log( 'found event.images', event.images );
-      if ( event.images && event.images[0] && event.images[0].id ) {
-        const img_id = event.images[0].id;
-        const req = this.request.getImage( event.id, img_id );
-        req.subscribe(
-          res => {
-            const data = this._arrayBufferToBase64(res);
-            // console.log( 'Image Data:', res );
-            img = `data:image/JPEG;base64,${res}`;
-            // img = res;
-          },
-          err => {
-            console.log( 'Received error status:', err.status );
-            if ( err.status === 200 ) {
-              console.log( err.message );
-            }
-          }
-        );
+  eventImage () {
+    const event = this.event;
+    event.subscribe(
+      evt => {
+        const temp = evt.image as string;
+        const img = this.sanitizer.bypassSecurityTrustUrl( temp );
+        evt.image = img as string;
       }
-    }
-    this.event.image = img as string;
-    this.event.thumbnail = this.sanitizer.bypassSecurityTrustStyle(`url(${img_default})`) as string;
+    );
   }
 
+  /*
+   * @method eventThumbnail
+   * sets safe thumb-nail image from API URL
+   */
+
+  eventThumbnail () {
+    const event = this.event;
+    event.subscribe(
+      evt => {
+        if (
+          evt.more
+          && evt.more.images
+          && evt.more.images[0]
+          && evt.more.images[0].id
+        ) {
+          const img_id = evt.more.images[0].id;
+          const src = this.request.getImage( evt.id, img_id ) as string;
+          console.log( `found ${src} for ${evt.id}` );
+          evt.thumbnail = this.sanitizer.bypassSecurityTrustStyle(`url(${src})`) as string;
+        }
+      }
+    );
+  }
   /*
    * @method _fixStatus
    * fixes invalid database data type (forces { coming: <boolean> })
@@ -117,27 +137,51 @@ export class DetailsService implements OnInit {
    * retrieves RSVP status for the provided event
    */
 
-  eventStatus( event ) {
+  eventStatus() {
     const cap = 5;
-    this.request.getStatus( event )
-      .retry(5)
-      .subscribe(
-        _user => {
-          // only accept { coming: <boolean> }
-          if ( typeof _user === 'object' && _user !== null ) {
-            if ( 'coming' in _user ) { this.event.rsvp = _user['coming']; }
-          } else {
-            this._fixStatus( event );
-          }
-          // console.log( `Event: ${event.id} | User Status: ${this.event.rsvp}` );
-        },
-        // retry until successful
-        err => {
-          // this.eventStatus( event );
-        }
-      );
+    this.event.subscribe(
+      evt => {
+        this.request.getStatus( evt )
+          .retry(5)
+          .subscribe(
+            _user => {
+              // only accept { coming: <boolean> }
+              if ( typeof _user === 'object' && _user !== null ) {
+                if ( 'coming' in _user ) { evt.rsvp = _user['coming']; }
+              } else {
+                this._fixStatus( evt );
+              }
+              // console.log( `Event: ${event.id} | User Status: ${this.event.rsvp}` );
+            },
+            // retry until successful
+            err => {
+              // this.eventStatus( event );
+            }
+          );
+      }
+    );
   }
 
+
+  /*
+   * @method eventImages
+   * form a image.src URL for all images in the more.images array
+   */
+
+  eventImages () {
+    const event = this.event;
+    event.subscribe(
+      evt => {
+        evt.more.images.forEach(
+          (img) => {
+            const src = this.request.getImage( evt.id, img.id );
+            console.log( `Found image for ${evt.id}... ${src}` );
+            img.src = src;
+          }
+        );
+      }
+    );
+  }
 
   /*
    * @method eventDetails
@@ -147,18 +191,22 @@ export class DetailsService implements OnInit {
   public eventDetails ( event, user, test?: boolean ) {
     // prevent output if loaded >= max
     if ( this.events_loaded < this.events_max ) {
+      this.event = this.eventFormat();
       this.eventData( event );
       if ( !test ) {
-        this.eventImage( event );
-        this.eventStatus( event );
+        this.eventThumbnail();
+        this.eventImage();
+        this.eventStatus();
+        // this.eventImages();
       }
       this.events_loaded++;
     }
+    this.event.subscribe(
+      evt => console.log(evt)
+    );
+    setTimeout( () => { this.event.subscribe( evt => evt.ready = true ); }, 150 );
     return this.event;
   }
-
-  // map( _event => this.eventDetails( _event, USER_ID ) )
-
 
   ngOnInit(): void {}
 

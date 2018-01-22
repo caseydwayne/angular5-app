@@ -16,7 +16,7 @@ export class EventComponent implements AfterContentChecked {
     private request: RequestService,
   ) {}
 
-  public message = encodeURI( 'View details at ' + location );
+  message = encodeURI( 'View details at ' + location );
 
   toggleStatus(event) {
     const status = !event.rsvp;

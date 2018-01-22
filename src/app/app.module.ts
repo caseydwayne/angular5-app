@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
-
+import { ImageComponent } from './image.component';
 import { EventComponent } from './event/event.component';
 
 import { RequestService } from './http/request.service';
@@ -23,7 +23,8 @@ import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ImageComponent
   ],
   imports: [
     BrowserModule,

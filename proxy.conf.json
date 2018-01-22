@@ -1,9 +1,10 @@
 {
-  "/api": {
+  "/api/*": {
     "target": "http://dev.dragonflyathletics.com:1337/api/dfkey/",
     "secure": false,
-    "auth": "Basic YW55dGhpbmc6ZXZhbHBhc3M=",
+    "auth": "anything:evalpass",
     "logLevel": "debug",
-    "changeOrigin": true
+    "changeOrigin": true,
+    "pathRewrite": {"^/api" : ""}
   }
 }

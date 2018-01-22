@@ -10,7 +10,11 @@
 }
 
 
-mat-grid-tile { cursor: pointer; }
+mat-grid-tile { 
+  cursor: pointer;
+  box-shadow: 0 0 .05em .02em rgba( 22, 22, 22, .4 );
+  background-color: rgba( 188, 188, 188, .05 ); 
+}
 mat-grid-tile-header { text-transform: capitalize; }
 mat-grid-tile-header, mat-grid-tile-footer { z-index: 2; }
 .event-preview .backdrop {

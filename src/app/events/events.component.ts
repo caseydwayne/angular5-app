@@ -1,13 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterContentChecked } from '@angular/core';
 import { Event, EventFormatted } from '../event/event';
 import { EVENT } from '../data/mock-event';
 import { EVENTS } from '../data/mock-events';
+import * as FULL_EVENTS from '../data/events.json';
+import * as MINI_EVENTS from '../data/events-mini.json';
 import { EventComponent } from '../event/event.component';
 import { RequestService } from '../http/request.service';
 import { DetailsService } from '../event/details.service';
 import { OverlayService } from '../overlay/overlay.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs/RX';
+
 import 'rxjs/add/operator/take';
+import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'app-events',
@@ -19,7 +23,7 @@ import 'rxjs/add/operator/take';
  * Assigns {events} from external data and creates related views
  */
 
-export class EventsComponent implements OnInit {
+export class EventsComponent implements OnInit, AfterContentChecked {
 
   constructor (
     private request: RequestService,
@@ -27,16 +31,17 @@ export class EventsComponent implements OnInit {
     private overlay: OverlayService
   ) {}
 
-  public events;
+  width = window.innerWidth;
+
+  public events; // : Observable<EventFormatted[]>;
   private events_valid: boolean;
   private events_loaded = 0;
 
   private tries = 0;
   private retry = false;
 
-  public width = window.innerWidth;
 
-  public selected: EventFormatted;
+  public selected; // : EventFormatted;
 
   /*
    * @method onSelect
@@ -49,7 +54,7 @@ export class EventsComponent implements OnInit {
   }
 
   private processEvents ( events, USER_ID ) {
-    return events.forEach(
+    this.events.forEach(
       evt => {
         const e = this.details.eventDetails( evt, USER_ID );
         return e;
@@ -63,14 +68,25 @@ export class EventsComponent implements OnInit {
    */
 
   public listEvents ( USER_ID?: string, demo?: boolean ) {
-    if ( demo ) {
-      const events = [ this.details.eventDetails( EVENT, USER_ID ) ];
-      // this.processEvents( events, USER_ID );
-      return this.events = events;
-    }
     const max_tries = 3; // limit the # of retrieval attempts
     const limit = 2; // limit the # of events
     let type_err;
+
+    if ( demo ) {
+      const events = Observable.of( Object(MINI_EVENTS) )
+        // .map( _evt => this.details.eventDetails( _evt, USER_ID ) )
+        .subscribe(
+          evts => {
+            this.events = evts.forEach(
+              evt => this.details.eventDetails( evt, USER_ID )
+            );
+          }
+        );
+      // this.processEvents( events, USER_ID );
+      // if ( limit > 0 ) { events.slice( 0, limit ); }
+      return this.events;
+    } else {
+
     const observer = this.request.getEvents()
       .subscribe(
         data => {
@@ -81,8 +97,9 @@ export class EventsComponent implements OnInit {
           }
           // convert raw EventData to EventFormatted
           data = this.processEvents( data, USER_ID );
+          this.events = data;
           // console.log( 'Found data:', (data instanceof Array), data.length, data );
-          this.events = limit > 0 ? data.slice( 0, limit ) : data;
+          // this.events = limit > 0 ? data.slice( 0, limit ) : data;
           const i = this.events_loaded++;
           if ( type_err ) { type_err.dismiss(); }
           if ( i === limit ) { return; }
@@ -108,6 +125,7 @@ export class EventsComponent implements OnInit {
           }
         }
       );
+    }
   }
 
   ngOnInit () {
@@ -117,6 +135,10 @@ export class EventsComponent implements OnInit {
     if ( demo ) { this.request.demo_mode(); }
     this.listEvents( USER_ID, demo );
 
+  }
+
+  ngAfterContentChecked() {
+    console.log(this.events);
   }
 
 }
