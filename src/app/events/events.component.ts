@@ -53,7 +53,7 @@ export class EventsComponent implements OnInit {
    */
 
   public listEvents ( USER_ID?: string, demo?: boolean ) {
-    if ( demo ) { return [ this.details.eventDetails( EVENT, USER_ID ) ]; }
+    if ( demo ) { return this.events = [ this.details.eventDetails( EVENT, USER_ID ) ]; }
     const max_tries = 3; // limit the # of retrieval attempts
     const limit = 2; // limit the # of events
     let type_err;
@@ -104,7 +104,7 @@ export class EventsComponent implements OnInit {
     const USER_ID = 'anything';
     const demo = true;
     if ( demo ) { this.request.demo_mode(); }
-    this.events = this.listEvents( USER_ID, demo );
+    this.listEvents( USER_ID, demo );
 
   }
 

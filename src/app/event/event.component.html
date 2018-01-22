@@ -1,4 +1,4 @@
-<div class="event">
+<div class="event" *ngIf="event; else no-event">
 
   <img [src]="event.image" alt="{{event.name}}" />
   
@@ -37,3 +37,6 @@
   </p>
   
 </div>
+<ng-template #no-event>
+  <p>Could not load event.</p>
+</ng-template>

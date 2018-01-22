@@ -1,5 +1,6 @@
 import {
   Component,
+  ComponentFactoryResolver,
   Input,
   Output,
   HostListener,
@@ -7,7 +8,7 @@ import {
   OnInit,
   AfterViewInit
 } from '@angular/core';
-// import { OverlayService } from './overlay.service';
+import { OverlayService } from './overlay.service';
 import { OverlayDirective } from './overlay.directive';
 
 @Component({
@@ -28,19 +29,67 @@ import { OverlayDirective } from './overlay.directive';
 
 export class OverlayComponent implements OnInit, AfterViewInit {
 
-  @ViewChild(OverlayDirective) contentWrapper: OverlayDirective;
-  @ViewChild('appOverlay') wrapper;
+  @ViewChild('appOverlay') wrapper; // get appOverlay to inject content
 
   constructor(
+    private resolver: ComponentFactoryResolver
   ) { }
 
-  public onClickedOutside () { console.log('clicked outside'); }
+  private overlayRef = null; // overlay reference
 
+  /*
+   * @method loadContents
+   * renders the given component into an overlay component inside the #appOverlay template
+   */
+
+  private loadContents ( component, data?, alias? ) {
+    // dynamically inject component into overlay template
+    const componentFactory = this.resolver
+      .resolveComponentFactory( component.component );
+    const viewContainerRef = this.wrapper.viewContainerRef;
+    viewContainerRef.clear();
+    const componentRef = viewContainerRef.createComponent(componentFactory);
+    // attach data property to use in component (via @Input(<key>))
+    if ( data ) {
+      (componentRef.instance)[ alias || 'data' ] = data;
+    }
+  }
+
+  /*
+   * @method close
+   * detaches overlay and nulls the reference
+   */
+
+  close() {
+    console.log( 'Closing Overlay Portal' );
+    if ( this.overlayRef && this.overlayRef.detach ) {
+      this.overlayRef.detach();
+      this.overlayRef = null;
+    }
+  }
+
+  onClickedOutside () {}
+
+  @HostListener('document:keydown', ['$event']) private handleKeydown(event: KeyboardEvent) {
+    const key = event.keyCode;
+    if ( key === 27 ) {
+      console.log('pressed escape');
+      this.close();
+    }
+  }
 
   ngAfterViewInit() {
     // this.loadContents();
+    console.log( this.wrapper );
+    this.onClickedOutside = function() {
+      console.log('clicked outside');
+      this.close();
+    };
   }
 
-  ngOnInit () {}
+  ngOnInit () {
+    // this.overlayRef = open
+  }
+
 }
 

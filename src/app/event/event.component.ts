@@ -10,11 +10,11 @@ import { EventFormatted } from './event';
 
 export class EventComponent implements AfterContentChecked {
 
+  @Input('event') event: EventFormatted;
+
   constructor (
     private request: RequestService,
   ) {}
-
-  @Input('event') event: EventFormatted;
 
   public message = encodeURI( 'View details at ' + location );
 
