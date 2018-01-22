@@ -1,6 +1,4 @@
 import { Component, AfterViewInit } from '@angular/core';
-import { OverlayService } from './overlay/overlay.service';
-import { OverlayComponent } from './overlay/overlay.component';
 
 @Component({
   selector: 'app-root',
@@ -10,9 +8,7 @@ import { OverlayComponent } from './overlay/overlay.component';
 
 export class AppComponent implements AfterViewInit {
 
-  constructor(
-    private overlay: OverlayService
-  ) {}
+  constructor () {}
 
   title = 'Angular5 App';
 
@@ -20,6 +16,5 @@ export class AppComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     setTimeout( () => { this.loading = false; } );
-    // this.overlay.open( OverlayComponent );
   }
 }

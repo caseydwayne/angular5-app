@@ -4,7 +4,7 @@
   "license": "None",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --proxy-config proxy.conf.js --host http://localhost --port 4200",
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",

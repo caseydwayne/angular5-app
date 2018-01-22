@@ -7,7 +7,7 @@ import { Directive, OnInit, ViewContainerRef } from '@angular/core';
 
 export class OverlayDirective implements OnInit {
   // @Input('event') event;
-  constructor( private viewContainerRef: ViewContainerRef ) { }
+  constructor( public viewContainerRef: ViewContainerRef ) { }
 
   ngOnInit () {}
 

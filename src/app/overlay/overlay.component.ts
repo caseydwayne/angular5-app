@@ -1,6 +1,5 @@
 import {
   Component,
-  ComponentFactoryResolver,
   Input,
   Output,
   HostListener,
@@ -8,7 +7,7 @@ import {
   OnInit,
   AfterViewInit
 } from '@angular/core';
-import { OverlayService } from './overlay.service';
+// import { OverlayService } from './overlay.service';
 import { OverlayDirective } from './overlay.directive';
 
 @Component({
@@ -16,9 +15,7 @@ import { OverlayDirective } from './overlay.directive';
   template: `
     <div id="#overlay" (clickOutside)="onClickedOutside($event)">
       <div class="overlay">
-        <h2>Overlay</h2>
-        <!--<app-event [event]="this.event"></app-event>-->
-        <ng-template appOverlay></ng-template>
+        <ng-template #appOverlay appOverlay></ng-template>
       </div>
     </div>
   `,
@@ -31,49 +28,14 @@ import { OverlayDirective } from './overlay.directive';
 
 export class OverlayComponent implements OnInit, AfterViewInit {
 
-  @Input('content') content;
-
   @ViewChild(OverlayDirective) contentWrapper: OverlayDirective;
+  @ViewChild('appOverlay') wrapper;
 
   constructor(
-    private overlay: OverlayService,
-    private resolver: ComponentFactoryResolver
   ) { }
 
-  @Input('clickedOutside') clickedOutside;
+  public onClickedOutside () { console.log('clicked outside'); }
 
-  loadContents ( component, data? ) {
-    const componentFactory = this.resolver
-      .resolveComponentFactory( component.component );
-    const viewContainerRef = this.contentWrapper.viewContainerRef;
-    viewContainerRef.clear();
-    const componentRef = viewContainerRef.createComponent(componentFactory);
-    (componentRef.instance).data = data;
-  }
-
-  @Output()
-  open( component, data?: any ) {
-    this.overlay.open( component, data );
-    // this.loadContents( component, data );
-    console.log( 'Opened Overlay Portal' );
-  }
-
-  @Output()
-  close() {
-    this.overlay.close();
-  }
-
-  onClickedOutside() {
-    console.log( 'clicked outside(directive)' );
-    this.overlay.close();
-  }
-
-  @HostListener('document:keydown', ['$event']) private handleKeydown(event: KeyboardEvent) {
-    const key = event.keyCode;
-    if ( key === 27 ) {
-      this.close();
-    }
-  }
 
   ngAfterViewInit() {
     // this.loadContents();

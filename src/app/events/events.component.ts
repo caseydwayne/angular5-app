@@ -2,13 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Event, EventFormatted } from '../event/event';
 import { EVENT } from '../data/mock-event';
 import { EventComponent } from '../event/event.component';
-import { HttpClient } from '@angular/common/http';
-import { JsonpModule, Jsonp, Response } from '@angular/http';
 import { RequestService } from '../http/request.service';
 import { DetailsService } from '../event/details.service';
 import { OverlayService } from '../overlay/overlay.service';
 import { Observable } from 'rxjs/Observable';
-import { map, retry, take } from 'rxjs/operators';
 import 'rxjs/add/operator/take';
 
 @Component({
@@ -23,7 +20,7 @@ import 'rxjs/add/operator/take';
 
 export class EventsComponent implements OnInit {
 
-  constructor(
+  constructor (
     private request: RequestService,
     private details: DetailsService,
     private overlay: OverlayService
@@ -39,9 +36,15 @@ export class EventsComponent implements OnInit {
   public width = window.innerWidth;
 
   public selected: EventFormatted;
-  onSelect(event: EventFormatted): void {
+
+  /*
+   * @method onSelect
+   * triggered upon clicking an event-preview
+   */
+
+  public onSelect(event: EventFormatted): void {
     this.selected = event;
-    // this.overlay.open( EventComponent, event );
+    this.overlay.open( EventComponent, event, 'event' );
   }
 
   /*

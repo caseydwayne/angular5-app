@@ -3,18 +3,19 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { FakeBackendProvider } from './http/fake-backend.interceptor';
+// import { FakeBackendProvider } from './http/fake-backend.interceptor';
 
 import { AppComponent } from './app.component';
 
 // import { UserModule } from './user/user.module';
 
-import { routing } from './routing';
+// import { routing } from './routing';
 
-import { JwtInterceptor } from './http/jwt.interceptor';
-import { AuthGuard } from './http/authguard';
-import { AuthenticationService } from './http/authentication.service';
+// import { JwtInterceptor } from './http/jwt.interceptor';
+// import { AuthGuard } from './http/authguard';
+// import { AuthenticationService } from './http/authentication.service';
 
+import { EventComponent } from './event/event.component';
 import { EventsComponent } from './events/events.component';
 
 import { RequestService } from './http/request.service';
@@ -59,6 +60,7 @@ import { environment } from '../environments/environment';
   ],
   entryComponents: [
     // OverlayComponent
+    EventComponent
   ],
   bootstrap: [ AppComponent ]
 })
