@@ -1,6 +1,7 @@
 import {
   Component,
   ComponentFactoryResolver,
+  TemplateRef,
   Input,
   Output,
   HostListener,
@@ -16,7 +17,11 @@ import { OverlayDirective } from './overlay.directive';
   template: `
     <div id="#overlay" (clickOutside)="onClickedOutside($event)">
       <div class="overlay">
+        <ng-content ngTemplateOutlet="contents?contents:defaultContent"></ng-content>
         <ng-template #appOverlay appOverlay></ng-template>
+        <ng-template #defaultContent>
+          <p>Add content by passing a (content)="templateName"</p>
+        </ng-template>
       </div>
     </div>
   `,
@@ -30,6 +35,8 @@ import { OverlayDirective } from './overlay.directive';
 export class OverlayComponent implements OnInit, AfterViewInit {
 
   @ViewChild('appOverlay') wrapper; // get appOverlay to inject content
+
+  @Input('contents') contents: TemplateRef<any>;
 
   constructor(
     private resolver: ComponentFactoryResolver

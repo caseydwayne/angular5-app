@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Event, EventFormatted } from '../event/event';
 import { EVENT } from '../data/mock-event';
+import { EVENTS } from '../data/mock-events';
 import { EventComponent } from '../event/event.component';
 import { RequestService } from '../http/request.service';
 import { DetailsService } from '../event/details.service';
@@ -44,7 +45,16 @@ export class EventsComponent implements OnInit {
 
   public onSelect(event: EventFormatted): void {
     this.selected = event;
-    this.overlay.open( EventComponent, event, 'event' );
+    // this.overlay.open( EventComponent, event, 'event' );
+  }
+
+  private processEvents ( events, USER_ID ) {
+    return events.forEach(
+      evt => {
+        const e = this.details.eventDetails( evt, USER_ID );
+        return e;
+      }
+    );
   }
 
   /*
@@ -53,7 +63,11 @@ export class EventsComponent implements OnInit {
    */
 
   public listEvents ( USER_ID?: string, demo?: boolean ) {
-    if ( demo ) { return this.events = [ this.details.eventDetails( EVENT, USER_ID ) ]; }
+    if ( demo ) {
+      const events = [ this.details.eventDetails( EVENT, USER_ID ) ];
+      // this.processEvents( events, USER_ID );
+      return this.events = events;
+    }
     const max_tries = 3; // limit the # of retrieval attempts
     const limit = 2; // limit the # of events
     let type_err;
@@ -66,10 +80,7 @@ export class EventsComponent implements OnInit {
             return this.listEvents();
           }
           // convert raw EventData to EventFormatted
-          data.forEach( evt => {
-            const e = this.details.eventDetails( evt, USER_ID );
-            return e;
-          });
+          data = this.processEvents( data, USER_ID );
           // console.log( 'Found data:', (data instanceof Array), data.length, data );
           this.events = limit > 0 ? data.slice( 0, limit ) : data;
           const i = this.events_loaded++;

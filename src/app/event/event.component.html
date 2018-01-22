@@ -1,11 +1,11 @@
-<div class="event" *ngIf="event; else no-event">
+<div class="event" *ngIf="event; else noEvent">
 
   <img [src]="event.image" alt="{{event.name}}" />
   
   <h2>{{event.name}}</h2>
   
   <p>{{event.description}}</p>
-
+  <span>{{event.rsvp?'yes':'no'}}</span>
   <details>
     <summary>Event Information</summary>
     <div>
@@ -27,7 +27,7 @@
   </details>
   
   <p>
-    <mat-slide-toggle [checked]="event.rsvp" (click)="toggleStatus(event)">
+    <mat-slide-toggle (click)="toggleStatus(event)">
       Going
     </mat-slide-toggle>
   </p>
@@ -37,6 +37,6 @@
   </p>
   
 </div>
-<ng-template #no-event>
+<ng-template #noEvent>
   <p>Could not load event.</p>
 </ng-template>

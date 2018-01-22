@@ -74,6 +74,7 @@ export class DetailsService implements OnInit {
 
   eventImage ( event ) {
     const img_default = this.event.image;
+    console.log( `found ${img_default} for ${event.id}` );
     let img = this.sanitizer.bypassSecurityTrustUrl(img_default);
     // disabled because 1) API provided img src attribute is wrong, 2) accuracy of API response is poo, consider using an API that works.
     const fetch = false;
@@ -144,6 +145,7 @@ export class DetailsService implements OnInit {
    */
 
   public eventDetails ( event, user, test?: boolean ) {
+    // prevent output if loaded >= max
     if ( this.events_loaded < this.events_max ) {
       this.eventData( event );
       if ( !test ) {

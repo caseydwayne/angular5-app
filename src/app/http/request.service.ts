@@ -113,7 +113,8 @@ export class RequestService implements OnInit {
     event.rsvp = rsvp;
     console.log( `Changed user status of "${this.user}" to ${rsvp}.` );
     const msg = rsvp ? '"Going"' : '"Not Going"';
-    this.snackBar.open( 'RSVP Status Changed To ' + msg, 'OK', { panelClass: 'success' } );
+    const sb = this.snackBar.open( 'RSVP Status Changed To ' + msg, 'OK', { panelClass: 'success' } );
+    setTimeout( () => sb.dismiss(), 2200 );
   }
 
   private statusError ( error ) {

@@ -1,23 +1,8 @@
 <div *ngIf="selected">
   <!----
   Selected Event: {{selected.name}}
-  <!----
-  <ng-template [cdkPortalOutlet]="userSettingsPortal"></ng-template>
-
-  <div *cdkPortal="overlayPortal">
-  </div>
-    <div *cdkPortal="overlayPortal">
-    </div>  
-  <app-event #overlayPortal [event]="selected"></app-event>
-  <!----
-  <app-overlay>
-    <app-event [event]="selected"></app-event>
-  </app-overlay>
-  <ng-template #overlay>TEST</ng-template>
   <!---->
-  
-  <!-- <app-event [event]="selected"></app-event>  -->
-  
+  <app-event [event]="selected"></app-event>
 </div>
 
 <!---->
@@ -58,7 +43,7 @@
 		  <mat-grid-tile-footer>
 			<div *ngIf="event.rsvp; then going else details"></div>
 			<ng-template #going>I'm Going!</ng-template>
-			<ng-template #details>Event Details</ng-template>
+			<ng-template #details>Event Details</ng-template>			
 		  </mat-grid-tile-footer>
 		  
 	  </mat-grid-tile>

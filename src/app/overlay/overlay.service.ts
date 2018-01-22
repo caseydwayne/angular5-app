@@ -26,6 +26,7 @@ export class OverlayService {
     const portal = new ComponentPortal(OverlayComponent);
     if ( data ) { portal.component[ alias || 'data' ] = data; }
     ref.attach( portal );
+    // ref._keydownEvents.subscribe( x => console.log(x) );
     // ref.backdropClick().subscribe( (x) => console.log('overlay backdrop clicked') );
     console.log( 'Opened Overlay Portal' );
     // load injected component/apply data param
