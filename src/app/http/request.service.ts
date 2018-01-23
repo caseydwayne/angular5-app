@@ -3,8 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/from';
-// import 'rxjs/add/operator/retry';
-// import { debounce, retry, retryWhen, delay, take } from 'rxjs/operators';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/take';
@@ -16,17 +14,9 @@ import { EventFormatted } from '../event/event';
 import { EVENT } from '../data/mock-event';
 
 // const API_URL = environment.api_url;
-// const API_URL = 'http://dev.dragonflyathletics.com:1337/api/dfkey/';
 const API_URL = '/api/'; // using a proxy to bypass same-origin errors
 
 const AUTH = { 'Authorization': 'Basic YW55dGhpbmc6ZXZhbHBhc3M=' };
-
-const TYPE_JSON = { 'Content-Type': 'application/json' };
-const TYPE_JPEG = { 'Content-Type': 'image/jpeg' };
-const TYPE_PNG = { 'Content-Type': 'image/png' };
-const TYPE_PLAIN = { 'Content-Type': 'text/plain' };
-const TYPE_FORM = { 'Content-Type': 'application/x-www-form-urlencoded' };
-const RES_ARRBUFF = { 'responseType': 'arraybuffer' };
 
 /*
  * The RequestService handles communication with the Events API
@@ -58,12 +48,12 @@ export class RequestService implements OnInit {
 
   public getEvents() {
     if ( this.demo ) {
-      return Observable.of( EVENT ).map(o => JSON.stringify(o));
+      return Observable.of( EVENT ).map( o => JSON.stringify(o) );
     }
     return this.http.get(
       API_URL + 'events',
       {
-        headers: new HttpHeaders({ ...TYPE_PLAIN, ...AUTH })
+        headers: new HttpHeaders({ ...AUTH })
       }
     );
   }
@@ -74,24 +64,7 @@ export class RequestService implements OnInit {
    */
 
   public getImage( eventid: string, mediaid: string ) {
-    if ( this.demo ) {
-      return `${API_URL}events/${eventid}/media/${mediaid}`;
-      // return Observable.of('assets/event.jpg');
-    }
     return `${API_URL}events/${eventid}/media/${mediaid}`;
-    /*
-    return this.http.get(
-      `${API_URL}events/${eventid}/media/${mediaid}`,
-      {
-        headers: new HttpHeaders({
-          // ...RES_ARRBUFF,
-          ...TYPE_JPEG,
-          ...AUTH
-        }),
-         responseType: 'text'
-      }
-    );
-    */
   }
 
   /*
@@ -106,9 +79,7 @@ export class RequestService implements OnInit {
     return this.http.get(
       `${API_URL}events/${event.id}/status/${this.user}`,
       {
-        headers: new HttpHeaders({
-          // ...TYPE_JSON,
-          ...AUTH })
+        headers: new HttpHeaders({ ...AUTH })
       }
     );
   }
@@ -131,28 +102,30 @@ export class RequestService implements OnInit {
    * updates the UserStatus in the API by toggling existing boolean (or explicitly via the 'value' argument)
    */
 
-  public updateStatus( event: EventFormatted, value: boolean ) {
+  public updateStatus( event: EventFormatted, value: boolean, silent?: boolean ) {
     const rsvp = value;
     const data = { coming: rsvp };
     if ( this.demo ) {
       return Observable.of( data )
         .subscribe(
-          () => this.statusChanged( event, rsvp ),
-          this.statusError
+          () => {
+            if ( !silent ) { this.statusChanged( event, rsvp ); }
+          },
+          err => { if ( !silent ) { this.statusError( err ); } }
         );
     }
     return this.http.put(
       `${API_URL}events/${event.id}/status/${this.user}`,
       data,
       {
-        headers: new HttpHeaders({
-          // ...TYPE_FORM,
-          ...AUTH })
+        headers: new HttpHeaders({ ...AUTH })
       })
       .retryWhen ( errors => errors.delay(1000).take(10) )
       .subscribe(
-        () => this.statusChanged( event, rsvp ),
-        this.statusError
+        () => {
+          if ( !silent ) { this.statusChanged( event, rsvp ); }
+        },
+        err => { if ( !silent ) { this.statusError( err ); } }
       );
   }
 
@@ -160,9 +133,6 @@ export class RequestService implements OnInit {
     return this.http.get( `${file}.json` );
   }
 
-  ngOnInit(): void {
-    // console.log('Request Service Initialized. Found Data.');
-    // this.getEvents( (data) => { console.log('Found Data'); } );
-  }
+  ngOnInit(): void { }
 
 }

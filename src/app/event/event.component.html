@@ -38,7 +38,7 @@
   </details>
   
   <p>
-    <mat-slide-toggle (click)="toggleStatus(event)">
+    <mat-slide-toggle [checked]="event.rsvp" (click)="toggleStatus(event)">
       Going
     </mat-slide-toggle>
   </p>

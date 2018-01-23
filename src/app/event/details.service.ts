@@ -23,7 +23,7 @@ export class DetailsService implements OnInit {
   private event: Observable<EventFormatted>;
 
   private events_loaded = 0;
-  private events_max = 99; // prevents additional calls to the server
+  private events_max = 80; // limits additional calls to the server
 
   /*
    * @method eventFormat
@@ -124,7 +124,7 @@ export class DetailsService implements OnInit {
    */
 
   _fixStatus ( event ) {
-    this.request.updateStatus( event, false );
+    this.request.updateStatus( event, false, true );
   }
 
   /*
