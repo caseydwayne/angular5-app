@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Event, EventFormatted } from '../event/event';
 import { DetailsService } from '../event/details.service';
 import { EVENT } from '../data/mock-event';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-events-test',
@@ -19,7 +20,7 @@ export class EventsTestComponent implements OnInit {
     private details: DetailsService
   ) {}
 
-  public events: EventFormatted[];
+  public events: Observable<EventFormatted>[];
   private events_valid: boolean;
   public selected: EventFormatted;
 
@@ -37,7 +38,7 @@ export class EventsTestComponent implements OnInit {
     const mock = this.details.eventDetails( EVENT, USER_ID, true );
 
     this.events = [ mock ];
- 
+
     this.events_valid = true;
 
   }
