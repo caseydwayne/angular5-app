@@ -7,7 +7,7 @@ import * as MINI_EVENTS from '../data/events-mini.json';
 import { EventComponent } from '../event/event.component';
 import { RequestService } from '../http/request.service';
 import { DetailsService } from '../event/details.service';
-import { OverlayService } from '../overlay/overlay.service';
+// import { OverlayService } from '../overlay/overlay.service';
 import { Observable, Subject, BehaviorSubject } from 'rxjs/RX';
 
 import 'rxjs/add/operator/take';
@@ -30,7 +30,7 @@ export class EventsComponent implements OnInit, AfterContentChecked {
   constructor (
     private request: RequestService,
     private details: DetailsService,
-    private overlay: OverlayService,
+    // private overlay: OverlayService,
     private change: ChangeDetectorRef
   ) {
 

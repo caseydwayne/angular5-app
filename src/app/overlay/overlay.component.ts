@@ -15,7 +15,7 @@ import { OverlayDirective } from './overlay.directive';
 @Component({
   selector: 'app-overlay',
   template: `
-    <div id="#overlay" (clickOutside)="onClickedOutside($event)">
+    <div id="#overlay" (clickOutside)="onClickedOutside()">
       <div class="overlay">
         <ng-content ngTemplateOutlet="contents?contents:defaultContent"></ng-content>
         <ng-template #appOverlay appOverlay></ng-template>

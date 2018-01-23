@@ -13,7 +13,7 @@ import { DetailsService } from './event/details.service';
 import { EventModule } from './event/event.module';
 import { EventsModule } from './events/events.module';
 
-import { OverlayProvider } from './overlay/overlay.module';
+// import { OverlayProvider } from './overlay/overlay.module';
 
 import { MaterialModule } from './material.module';
 
@@ -30,7 +30,7 @@ import { environment } from '../environments/environment';
     BrowserModule,
     HttpClientModule,
     MaterialModule,
-    OverlayProvider,
+    // OverlayProvider,
     EventModule,
     EventsModule,
     ServiceWorkerModule.register( '/ngsw-worker.js', { enabled: environment.production } )
