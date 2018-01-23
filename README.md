@@ -1,27 +1,20 @@
 # Angular5 App
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.6.3.
+### How To Launch
 
-## Development server
+You will have to use `npm start` to launch the project. It relies on a (reverse) proxy in order to access the images...
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Navigate to `http://localhost:4200/` and click away.
 
-## Code scaffolding
+***IF AN IMAGE DOES NOT LOAD, THE SERVER RETURNED A BOGUS 401 OR 404 RESPONSE.***
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+My code works.
 
-## Build
+----
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+#### Notes
 
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+- The update (put) call to the API is currently disabled. UI/Setting mechanics still activate.
+- The app only works on demo mode because I didn't feel like wiring everything back up.
+- Only the 160 chars of the first 10 comments will be shown.
+- Only the first 99 events will make additional requests to the api (for images/user status).
