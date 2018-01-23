@@ -156,6 +156,10 @@ export class RequestService implements OnInit {
       );
   }
 
+  public getJSON ( file ) {
+    return this.http.get( `${file}.json` );
+  }
+
   ngOnInit(): void {
     // console.log('Request Service Initialized. Found Data.');
     // this.getEvents( (data) => { console.log('Found Data'); } );

@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterContentChecked } from '@angular/core';
+import { Component, OnInit, AfterContentChecked, ChangeDetectorRef } from '@angular/core';
 import { Event, EventFormatted } from '../event/event';
 import { EVENT } from '../data/mock-event';
 import { EVENTS } from '../data/mock-events';
@@ -8,10 +8,11 @@ import { EventComponent } from '../event/event.component';
 import { RequestService } from '../http/request.service';
 import { DetailsService } from '../event/details.service';
 import { OverlayService } from '../overlay/overlay.service';
-import { Observable } from 'rxjs/RX';
+import { Observable, Subject, BehaviorSubject } from 'rxjs/RX';
 
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/map';
+// import 'rxjs/add/operator/flatmap';
 
 @Component({
   selector: 'app-events',
@@ -28,20 +29,17 @@ export class EventsComponent implements OnInit, AfterContentChecked {
   constructor (
     private request: RequestService,
     private details: DetailsService,
-    private overlay: OverlayService
-  ) {}
+    private overlay: OverlayService,
+    private change: ChangeDetectorRef
+  ) {
+
+  }
 
   width = window.innerWidth;
 
-  public events; // : Observable<EventFormatted[]>;
-  private events_valid: boolean;
-  private events_loaded = 0;
+  events = new Subject();
 
-  private tries = 0;
-  private retry = false;
-
-
-  public selected; // : EventFormatted;
+  public selected;
 
   /*
    * @method onSelect
@@ -53,78 +51,48 @@ export class EventsComponent implements OnInit, AfterContentChecked {
     // this.overlay.open( EventComponent, event, 'event' );
   }
 
-  private processEvents ( events, USER_ID ) {
-    this.events.forEach(
-      evt => {
-        const e = this.details.eventDetails( evt, USER_ID );
-        return e;
-      }
-    );
-  }
-
   /*
    * @method listEvents
    * requests from API and lists all events
    */
 
   public listEvents ( USER_ID?: string, demo?: boolean ) {
-    const max_tries = 3; // limit the # of retrieval attempts
-    const limit = 2; // limit the # of events
-    let type_err;
-
     if ( demo ) {
-      const events = Observable.of( Object(MINI_EVENTS) )
-        // .map( _evt => this.details.eventDetails( _evt, USER_ID ) )
-        .subscribe(
-          evts => {
-            this.events = evts.forEach(
-              evt => this.details.eventDetails( evt, USER_ID )
-            );
-          }
-        );
-      // this.processEvents( events, USER_ID );
-      // if ( limit > 0 ) { events.slice( 0, limit ); }
-      return this.events;
-    } else {
-
-    const observer = this.request.getEvents()
-      .subscribe(
+      // this.events = Object( MINI_EVENTS );
+      const req = this.request.getJSON( 'assets/data/events-mini' );
+      req.subscribe(
         data => {
-          // retry if response is not valid JSON
-          if ( typeof data !== 'object' ) {
-            type_err = this.request.error('Events API returned an invalid response. Retrying...');
-            return this.listEvents();
-          }
-          // convert raw EventData to EventFormatted
-          data = this.processEvents( data, USER_ID );
-          this.events = data;
-          // console.log( 'Found data:', (data instanceof Array), data.length, data );
-          // this.events = limit > 0 ? data.slice( 0, limit ) : data;
-          const i = this.events_loaded++;
-          if ( type_err ) { type_err.dismiss(); }
-          if ( i === limit ) { return; }
-        },
-        err => {
-          // retry if API is unavailable
-          this.tries++;
-          if ( this.tries < max_tries ) {
-            this.request.error('Events API is unavailable. Retrying.');
-            this.listEvents();
-          } else {
-            const msg = this.retry
-              ? 'Please check your connection and try again.'
-              : 'The Events API is currently unavailable.';
-            const snack = this.request.error( msg, 'Retry' );
-            snack.onAction().subscribe(
-              () => {
-                this.retry = true;
-                this.tries = 0;
-                return this.listEvents( USER_ID );
-              }
-            );
-          }
+          /*
+          data.forEach(
+            _evt =>
+              Observable.from( this.details.eventDetails( _evt, USER_ID ) )
+          );
+          console.log( 'Found data:', data );
+          this.events.next(data);
+          */
         }
       );
+      this.change.detectChanges();
+      /*
+        .subscribe(
+          data => {
+            data.forEach(
+              _evt => {
+                const e = this.details.eventDetails( _evt, USER_ID );
+                console.log( 'Found', e );
+                return Observable.of(e); // this is correct (EventFormatted)
+              }
+            );
+            // this.events = Observable.from( data );
+            // const formatted = this.details.eventDetails( _evt, USER_ID );
+            // console.log( 'listEvents subscribe map', formatted );
+            // return Observable.of( formatted );
+            // console.log( 'listEvents subscribe', this.events );
+          }
+        );
+    */
+    } else {
+
     }
   }
 
@@ -138,7 +106,7 @@ export class EventsComponent implements OnInit, AfterContentChecked {
   }
 
   ngAfterContentChecked() {
-    console.log(this.events);
+    // console.log(this.events);
   }
 
 }

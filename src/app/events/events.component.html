@@ -23,7 +23,7 @@
 	  >
 
       <mat-grid-tile     
-		*ngFor="let event of events"
+		*ngFor="let event of events | async"
 		class="event-preview"              
 		(click)="onSelect(event)"
 		>
@@ -45,7 +45,7 @@
 		      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 		    </ng-template>
 		    
-		    <div *ngIf="event.more | async">
+		    <div *ngIf="event.more">
 		      <div *ngIf="event.more.images; else noImages | async">
                 <div *ngFor="let img of event.more.images | async">
                   <p>{{img.id}}</p>

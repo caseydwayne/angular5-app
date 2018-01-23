@@ -111,11 +111,11 @@ export class DetailsService implements OnInit {
       evt => {
         if (
           evt.more
-          && evt.more.images
-          && evt.more.images[0]
-          && evt.more.images[0].id
+          && evt.more['images']
+          && evt.more['images'][0]
+          && evt.more['images'][0].id
         ) {
-          const img_id = evt.more.images[0].id;
+          const img_id = evt.more['images'][0].id;
           const src = this.request.getImage( evt.id, img_id ) as string;
           console.log( `found ${src} for ${evt.id}` );
           evt.thumbnail = this.sanitizer.bypassSecurityTrustStyle(`url(${src})`) as string;
@@ -172,7 +172,7 @@ export class DetailsService implements OnInit {
     const event = this.event;
     event.subscribe(
       evt => {
-        evt.more.images.forEach(
+        evt.more['images'].forEach(
           (img) => {
             const src = this.request.getImage( evt.id, img.id );
             console.log( `Found image for ${evt.id}... ${src}` );
@@ -202,7 +202,7 @@ export class DetailsService implements OnInit {
       this.events_loaded++;
     }
     this.event.subscribe(
-      evt => console.log(evt)
+      // evt => console.log(evt)
     );
     setTimeout( () => { this.event.subscribe( evt => evt.ready = true ); }, 150 );
     return this.event;
