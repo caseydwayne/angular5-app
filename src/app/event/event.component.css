@@ -4,11 +4,17 @@
   background: #888;
 }
 
-ul {
-  border: 1px solid gray;
-  padding: 1rem;
-  margin: 1rem;
-  background: #770000;
+h2 { color: red; text-transform: capitalize; }
+
+.comment ul li {
+  list-style: none; padding: 1rem; background: rgb(123,123,123); color: white;
 }
 
-h2 { color: red; text-transform: capitalize; }
+.images {
+	border: 1px solid #323232;
+	margin: 20px;
+}
+.images .wrap {
+  max-width: 300px;
+  display: inline-block;
+}

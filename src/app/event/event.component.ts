@@ -10,6 +10,7 @@ import { EventFormatted } from './event';
 
 export class EventComponent implements AfterContentChecked {
 
+  // can only be created via (event)="<EventFormatted>" property
   @Input('event') event: EventFormatted;
 
   constructor (

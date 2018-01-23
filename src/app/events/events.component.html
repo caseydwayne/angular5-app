@@ -14,7 +14,7 @@
     <mat-progress-bar mode="query"></mat-progress-bar>
   </div>
   
-  <div *ngIf="events">    
+  <div *ngIf="events">
     <h2>Found Events!</h2>
     <mat-grid-list    
 	  cols="{{width>1200?2:1}}" 
@@ -23,12 +23,14 @@
 	  >
 
       <mat-grid-tile     
-		*ngFor="let event of events | async"
+		*ngFor="let event of events"
 		class="event-preview"              
 		(click)="onSelect(event)"
 		>
 	
-		  <div class="backdrop" [style.background-image]="event.thumbnail"></div>
+		  <div class="backdrop" [style.background-image]="event.thumbnail">
+		    <h5>Invalid Server Response</h5>
+		  </div>
 		
 		  <mat-grid-tile-header>
 		    {{event.name}}
@@ -38,16 +40,16 @@
             		
 			<div class="description">
 			  <p>{{ event.description | slice:0:32 }}...</p>
-			  <app-event-location class="location" [event]="event"></app-event-location>
-			</div>        			
+			  <app-event-location class="location" [event]="event"></app-event-location>			  
+			</div>
 			
-			<ng-template ngIf="!event.ready">
+			<ng-template *ngIf="event.ready">
 		      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 		    </ng-template>
 		    
-		    <div *ngIf="event.more">
-		      <div *ngIf="event.more.images; else noImages | async">
-                <div *ngFor="let img of event.more.images | async">
+		    <div *ngIf="event.more && false">
+		      <div *ngIf="event.more.images; else noImages">
+                <div *ngFor="let img of event.more.images">
                   <p>{{img.id}}</p>
                   <img (src)="img.src" />                  
                 </div>

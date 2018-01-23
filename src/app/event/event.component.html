@@ -1,15 +1,17 @@
 <div class="event" *ngIf="event; else noEvent">
 
-  <img [src]="event.image" alt="{{event.name}}" />
+  <img [src]="event.image" alt="Seeing this? Server returned a bogus response." />
   
   <h2>{{event.name}}</h2>
   
   <p>{{event.description}}</p>
   
-  <div *ngIf="event.more; else noImages">
+  <div *ngIf="event.more; else noImages" class="images">
     <div *ngIf="event.more.images">
       <div *ngFor="let img of event.more.images">
-        <img (src)="img.src" />
+        <div class="wrap">
+          <img [src]="img.src" alt="Seeing this? Server returned a bogus response." />
+        </div>
       </div>
     </div>
   </div>
@@ -21,13 +23,13 @@
       <p>Location: {{event.location.city}}, {{event.location.state}}</p>
       <div *ngIf="event.more">
         <div *ngIf="event.more.date">
-          <p>Date: {{event.more.date | date:'mm/dd/y'}}</p>
+          <p>Date: {{event.more.date | date:'MM/dd/y'}}</p>
         </div>
-        <div *ngIf="event.more.comments">
+        <div *ngIf="event.more.comments" class="comments">
           <p>Comments:</p>
-          <ul>          
-            <li *ngFor="let comment of event.more.comments">
-              Comment: {{comment.from}} says {{comment.text}}
+          <ul>
+            <li *ngFor="let comment of event.more.comments.slice(0,10)">
+              Comment: {{comment.from}} says {{ comment.text | slice:0:157 }}...
             </li> 
           </ul>
         </div>

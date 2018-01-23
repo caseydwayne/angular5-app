@@ -23,7 +23,7 @@ export class DetailsService implements OnInit {
   private event: Observable<EventFormatted>;
 
   private events_loaded = 0;
-  private events_max = 2;
+  private events_max = 99; // prevents additional calls to the server
 
   /*
    * @method eventFormat
@@ -31,7 +31,7 @@ export class DetailsService implements OnInit {
    */
 
   eventFormat () {
-    return Observable.of({
+    return ({
       id: 'uniqueidstring',
       name: 'Event Name',
       description: 'Descriptive text describing event.',
@@ -70,31 +70,26 @@ export class DetailsService implements OnInit {
   }
 
   /*
-   * @method _arrayBufferToBase64
-   * modified from https://stackoverflow.com/questions/9267899/arraybuffer-to-base64-encoded-string
-   */
-
-  _arrayBufferToBase64( buffer ) {
-    let binary = '';
-    const bytes = new Uint8Array( buffer );
-    const len = bytes.byteLength;
-    for (let i = 0; i < len; i++) {
-        binary += String.fromCharCode( bytes[ i ] );
-    }
-    return window.btoa( binary );
-  }
-
-  /*
    * @method eventData
    * converts image path to TrustUrl for (src)="<TrustUrl>"
    */
 
   eventImage () {
     const event = this.event;
+    let src = '';
     event.subscribe(
       evt => {
-        const temp = evt.image as string;
-        const img = this.sanitizer.bypassSecurityTrustUrl( temp );
+        src = evt.image as string;
+        if (
+          evt.more
+          && evt.more['images']
+          && evt.more['images'][1]
+          && evt.more['images'][1].id
+        ) {
+          const img_id = evt.more['images'][1].id;
+          src = this.request.getImage( evt.id, img_id ) as string;
+        }
+        const img = this.sanitizer.bypassSecurityTrustUrl( src );
         evt.image = img as string;
       }
     );
@@ -176,7 +171,7 @@ export class DetailsService implements OnInit {
           (img) => {
             const src = this.request.getImage( evt.id, img.id );
             console.log( `Found image for ${evt.id}... ${src}` );
-            img.src = src;
+            img.src = this.sanitizer.bypassSecurityTrustUrl( src );
           }
         );
       }
@@ -190,21 +185,22 @@ export class DetailsService implements OnInit {
 
   public eventDetails ( event, user, test?: boolean ) {
     // prevent output if loaded >= max
-    if ( this.events_loaded < this.events_max ) {
-      this.event = this.eventFormat();
+    if ( this.events_max > 0 && this.events_loaded < this.events_max ) {
+      console.log( 'Processing Event', event.id );
+      this.event = Observable.of( this.eventFormat() );
       this.eventData( event );
       if ( !test ) {
         this.eventThumbnail();
         this.eventImage();
         this.eventStatus();
-        // this.eventImages();
+        this.eventImages();
       }
       this.events_loaded++;
     }
     this.event.subscribe(
       // evt => console.log(evt)
     );
-    setTimeout( () => { this.event.subscribe( evt => evt.ready = true ); }, 150 );
+    setTimeout( () => { this.event.subscribe( evt => evt.ready = true ); }, 250 );
     return this.event;
   }
 

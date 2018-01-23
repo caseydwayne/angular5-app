@@ -10,9 +10,9 @@ import { DetailsService } from '../event/details.service';
 import { OverlayService } from '../overlay/overlay.service';
 import { Observable, Subject, BehaviorSubject } from 'rxjs/RX';
 
-import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/map';
-// import 'rxjs/add/operator/flatmap';
+import 'rxjs/add/operator/concatAll';
+import 'rxjs/add/operator/mergeMap';
 
 @Component({
   selector: 'app-events',
@@ -37,7 +37,7 @@ export class EventsComponent implements OnInit, AfterContentChecked {
 
   width = window.innerWidth;
 
-  events = new Subject();
+  events;
 
   public selected;
 
@@ -58,21 +58,37 @@ export class EventsComponent implements OnInit, AfterContentChecked {
 
   public listEvents ( USER_ID?: string, demo?: boolean ) {
     if ( demo ) {
-      // this.events = Object( MINI_EVENTS );
-      const req = this.request.getJSON( 'assets/data/events-mini' );
+      // convert fetched Event JSON into data model (EventFormatted)
+      const req = this.request.getJSON( 'assets/data/events-mini' )
+      .mergeMap(
+        ( result: Array<Event> ) => {
+          return Observable.forkJoin(
+            result.map(
+              ( event: Event ) => this.details.eventDetails( event, USER_ID )
+            )
+          );
+        }
+      );
+      req.subscribe( v => {
+        this.events = v;
+      });
+      /*
       req.subscribe(
         data => {
-          /*
-          data.forEach(
-            _evt =>
-              Observable.from( this.details.eventDetails( _evt, USER_ID ) )
-          );
           console.log( 'Found data:', data );
-          this.events.next(data);
-          */
+          const events = Observable.from( data );
+          events.map(
+            _evt => {
+              return this.details.eventDetails( _evt, USER_ID );
+            }
+          );
+          console.log( 'Updating events', events );
+          this.events = events;
+          // this.events.next(data);
         }
       );
       this.change.detectChanges();
+      */
       /*
         .subscribe(
           data => {
