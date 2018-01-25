@@ -2,7 +2,7 @@
 
 A Single Page Application (SPA) made using Angular 5, Angular Material, and the Angular CDK.
 
-## What It Does
+### What It Does
 
 Lists events, toggles RSVP.
 
@@ -10,7 +10,7 @@ Lists events, toggles RSVP.
 
 This app was built as an interview assignment.
 
-#### How It's Made
+### How It's Made
 
 The code was made to work against a wonky API. It features resiliant HTTP requests to counter the random failures and invalid responses of the API server (according to legend, it's meant to simulate poor network conditions on mobile devices). 
 
