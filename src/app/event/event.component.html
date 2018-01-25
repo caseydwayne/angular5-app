@@ -1,15 +1,19 @@
 <div class="event row" *ngIf="event; else noEvent">
 
-  <div class="col col-offset-2 col-10">
-    <img [src]="event.image" alt="Seeing this? Server returned a bogus response." />
+  <div class="col-10 offset-1">
+    <div class="main-image">
+      <img [src]="event.image" alt="Seeing this? Server returned a bogus response." />
+    </div>
   </div>
   
-  <div class="col-12">
-    <h2>{{event.name}}</h2>  
-    <p>{{event.description}}</p>  
+  <div class="col-10 offset-1">
+    <div class="event-content">
+      <h2>{{event.name}}</h2>  
+      <p>{{event.description}}</p>
+    </div>  
   </div>
   
-  <div class="col-12">
+  <div class="col-10 offset-1">
     <mat-expansion-panel>
   
       <mat-expansion-panel-header>
@@ -60,17 +64,19 @@
     </mat-expansion-panel>
   </div>
   
-  <div class="col-12">
-    <p>
-      <mat-slide-toggle [checked]="event.rsvp" (click)="toggleStatus(event)">
-        Going
-      </mat-slide-toggle>
-    </p>
+  <div class="col-10 offset-1">
+    
+    <mat-slide-toggle [checked]="event.rsvp" (click)="toggleStatus(event)">
+      Going
+    </mat-slide-toggle>
+    
   </div>
       
-  <p>
-    <a href="mailto:?subject=Check this out!&body={{message}}">Share Event</a>
-  </p>
+  <div class="col-10 offset-1">
+    <p>
+      <a href="mailto:?subject=Check this out!&body={{message}}">Share Event</a>
+    </p>
+  </div>
   
 </div>
 

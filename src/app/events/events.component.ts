@@ -1,4 +1,4 @@
-import { Component, Output, OnInit, AfterContentChecked, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Event, EventFormatted } from '../event/event';
 import { EVENT } from '../data/mock-event';
 import { EVENTS } from '../data/mock-events';
@@ -8,7 +8,7 @@ import { EventComponent } from '../event/event.component';
 import { RequestService } from '../http/request.service';
 import { DetailsService } from '../event/details.service';
 // import { OverlayService } from '../overlay/overlay.service';
-import { Observable, Subject, BehaviorSubject } from 'rxjs/RX';
+import { Observable } from 'rxjs/RX';
 
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/map';
@@ -35,13 +35,12 @@ const settings = {
  * Assigns {events} from external data and creates related views
  */
 
-export class EventsComponent {
+export class EventsComponent implements OnInit {
 
   constructor (
     private request: RequestService,
     private details: DetailsService,
-    // private overlay: OverlayService,
-    private change: ChangeDetectorRef
+    // private overlay: OverlayService
   ) { this.settings = settings; }
 
   demo: boolean;
@@ -105,6 +104,7 @@ export class EventsComponent {
       req = this.processEvents( req, USER_ID, demo );
       req.subscribe( v => {
         this.events = v;
+        this.onSelect( v[0] );
       });
       return this.events;
 
@@ -154,7 +154,7 @@ export class EventsComponent {
 
     const USER_ID = 'anything';
 
-    const demo = this.demo = true;
+    const demo = this.demo = !true;
     if ( demo ) { this.request.demo_mode(); }
     const events = this.listEvents( USER_ID, demo );
     // this.overlay.open( EventComponent, event, 'event' );

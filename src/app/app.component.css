@@ -1,22 +1,3 @@
 #wrap {
   min-height: 100vh;
 }
-
-.center {
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.p2e {
-  padding: 2em;
-}
-
-.pb0 {
-  padding-bottom: 0;
-}
-
-.note {
-  font-size: 80%;
-  opacity: .8;
-}

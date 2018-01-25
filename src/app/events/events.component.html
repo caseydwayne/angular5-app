@@ -27,9 +27,8 @@
 		(click)="onSelect(event)"
 		>
 	
-		  <div class="backdrop" [style.background-image]="event.thumbnail">
-		    <h5>Invalid Server Response</h5>
-		  </div>
+	      <div class="backdrop backdrop-default" [style.background-image]="event.default_thumbnail"></div>
+		  <div class="backdrop" [style.background-image]="event.thumbnail"></div>
 		
 		  <mat-grid-tile-header>
 		    {{event.name}}
@@ -60,11 +59,9 @@
 		
 		  <mat-grid-tile-footer>
 			<div *ngIf="event.rsvp; then going else details"></div>
-			<ng-template #going>I'm Going!</ng-template>
+	        <ng-template #going>I'm Going!</ng-template>
 			<ng-template #details>Event Details</ng-template>			
-		  </mat-grid-tile-footer>
-		  <div *ngIf="event.more">
-  </div>
+		  </mat-grid-tile-footer>		
 		  
 	  </mat-grid-tile>
 

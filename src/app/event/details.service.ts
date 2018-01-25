@@ -38,6 +38,7 @@ export class DetailsService implements OnInit {
       location: { city: 'Knoxville', state: 'Tennessee' },
       image: 'assets/event.jpg',
       thumbnail: 'assets/event-thumbnail.jpg',
+      default_thumbnail: 'assets/event-thumbnail.jpg',
       rsvp: true,
       more: {
         images: [],
@@ -195,7 +196,7 @@ export class DetailsService implements OnInit {
       this.event.subscribe(
           evt => {
             evt.image = this.sanitizer.bypassSecurityTrustUrl( 'assets/event.jpg' );
-            evt.thumbnail = this.sanitizer.bypassSecurityTrustStyle(`url('assets/event-thumbnail.jpg')`) as string;
+            evt.thumbnail = evt.default_thumbnail = this.sanitizer.bypassSecurityTrustStyle(`url('assets/event-thumbnail.jpg')`) as string;
           }
         );
       // activate additional API calls if not in demo mode
