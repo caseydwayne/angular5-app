@@ -1,20 +1,19 @@
 # Angular5 App
 
-### How To Launch
+A Single Page Application (SPA) made using Angular 5, Angular Material, and the Angular CDK.
 
-You will have to use `npm start` to launch the project. It relies on a (reverse) proxy in order to access the images...
+## What It Does
 
-Navigate to `http://localhost:4200/` and click away.
+Lists events, toggles RSVP.
 
-**IF AN IMAGE DOES NOT LOAD** THE SERVER RETURNED A BOGUS 401 OR 404 RESPONSE.
+### Why It Exists
 
-My code works.
+This app was built as an interview assignment.
 
-----
+#### How It's Made
 
-#### Notes
+The code was made to work against a wonky API. It features resiliant HTTP requests to counter the random failures and invalid responses of the API server (according to legend, it's meant to simulate poor network conditions on mobile devices). 
 
-- ~~The update (put) call to the API is currently disabled. UI/Setting mechanics still activate.~~ Works.
-- ~~The app only works on demo mode because I didn't feel like wiring everything back up.~~ Works.
-- Only the 160 chars of the first 10 comments will be shown.
-- **Only the first 80 events** will make additional requests to the API (for images/actual user status).
+Graceful fallbacks are in place to notify users of users of problems and, when possible, make it seem like there isn't one (as in the case of the random failures on requests for image).
+
+The server required authentication for every request, which meant images could not be accessed directly. A reverse proxy was used to bypass the CORS restrictions (and would be promptly removed prior to real-world use).
