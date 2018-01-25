@@ -2,6 +2,8 @@
 
 A single page application (SPA) made using Angular 5, Angular Material, and the Angular CDK.
 
+> Use `npm start` to launch with reverse proxy (required outside of demo mode).
+
 ## What It Does
 
 Lists events, toggles RSVP.
