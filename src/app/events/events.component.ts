@@ -9,6 +9,7 @@ import { RequestService } from '../http/request.service';
 import { DetailsService } from '../event/details.service';
 // import { OverlayService } from '../overlay/overlay.service';
 import { Observable } from 'rxjs/RX';
+import { environment } from '../../environments/environment';
 
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/map';
@@ -153,8 +154,8 @@ export class EventsComponent implements OnInit {
   ngOnInit () {
 
     const USER_ID = 'anything';
-
-    const demo = this.demo = !true;
+    // API calls disabled for production because external API is misconfigured (requires proxy to access images)
+    const demo = this.demo = environment.production || true;
     if ( demo ) { this.request.demo_mode(); }
     const events = this.listEvents( USER_ID, demo );
     // this.overlay.open( EventComponent, event, 'event' );
