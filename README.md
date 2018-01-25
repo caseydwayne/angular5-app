@@ -19,3 +19,9 @@ The code was made to work against a wonky API. It features resiliant HTTP reques
 Graceful fallbacks are in place to notify users of users of problems and, when possible, make it seem like there isn't one (as in the case of the random failures on requests for image).
 
 The server required authentication for every request, which meant images could not be accessed directly. A reverse proxy was used to bypass the CORS restrictions (and would be promptly removed prior to real-world use).
+
+#### Installation Instructions
+
+`git clone`, `npm install`, `npm start`, `http://localhost:4200`.
+
+**May require @angular-devkit/core (`npm install @angular-devkit/core`)**
