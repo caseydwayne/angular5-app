@@ -186,9 +186,19 @@ export class DetailsService implements OnInit {
   public eventDetails ( event, user, test?: boolean ) {
     // prevent output if loaded >= max
     if ( this.events_max > 0 && this.events_loaded < this.events_max ) {
-      console.log( 'Processing Event', event.id );
+      // console.log( 'Processing Event', event.id );
+      // Create observable of generic EventFormatted
       this.event = Observable.of( this.eventFormat() );
+      // replace generic data with Event values
       this.eventData( event );
+      // set placeholder images
+      this.event.subscribe(
+          evt => {
+            evt.image = this.sanitizer.bypassSecurityTrustUrl( 'assets/event.jpg' );
+            evt.thumbnail = this.sanitizer.bypassSecurityTrustStyle(`url('assets/event-thumbnail.jpg')`) as string;
+          }
+        );
+      // activate additional API calls if not in demo mode
       if ( !test ) {
         this.eventThumbnail();
         this.eventImage();
@@ -200,6 +210,7 @@ export class DetailsService implements OnInit {
     this.event.subscribe(
       // evt => console.log(evt)
     );
+    // trigger ready after .25s delay (UX choice, feels more natural)
     setTimeout( () => { this.event.subscribe( evt => evt.ready = true ); }, 250 );
     return this.event;
   }

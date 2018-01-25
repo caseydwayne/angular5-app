@@ -1,4 +1,4 @@
-import { Component, Input, AfterContentChecked } from '@angular/core';
+import { Component, Input, Output, AfterContentChecked } from '@angular/core';
 import { RequestService } from '../http/request.service';
 import { EventFormatted } from './event';
 import { Observable } from 'rxjs/Observable';
@@ -9,10 +9,13 @@ import { Observable } from 'rxjs/Observable';
   styleUrls: ['./event.component.css']
 })
 
-export class EventComponent implements AfterContentChecked {
+export class EventComponent {
 
   // can only be created via (event)="<EventFormatted>" property
   @Input('event') event: Observable<EventFormatted>;
+
+  @Input('demo') demo: boolean;
+
 
   constructor (
     private request: RequestService,
@@ -25,8 +28,7 @@ export class EventComponent implements AfterContentChecked {
     this.request.updateStatus( event, status );
   }
 
-  ngAfterContentChecked() {
-    // if ( !this.event.image ) { this.event.image = 'assets/event.jpg'; }
-  }
+  // ngOnInit () { this.event.subscribe( evt => this.event = evt ); }
+
 
 }

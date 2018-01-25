@@ -14,7 +14,25 @@ h2 { color: red; text-transform: capitalize; }
 	border: 1px solid #323232;
 	margin: 20px;
 }
+
 .images .wrap {
   max-width: 300px;
   display: inline-block;
+}
+
+mat-card {
+  background: white;
+  color: black;
+  margin-bottom: 20px;
+  opacity: .88;
+  transform: scale(.99);
+  transition-duration: .2s;
+}
+mat-card:hover {
+  opacity: 1;
+  transform: scale(1);
+}
+mat-card-content {
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
