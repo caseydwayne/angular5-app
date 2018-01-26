@@ -17,6 +17,7 @@ export interface EventFormatted {
   location: object;
   image: SafeUrl | string;
   thumbnail: SafeStyle | string;
+  default_thumbnail: SafeStyle | string;
   rsvp: boolean;
   more: object;
   ready: boolean;

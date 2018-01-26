@@ -1,3 +1,5 @@
+@import "~@angular/material/prebuilt-themes/pink-bluegrey.css";
+
 html, body {
   width: 100%;
   height: 100%;
@@ -8,8 +10,17 @@ html, body {
   padding: 0;
 }
 
+body {
+  max-width: 1560px;
+  margin-left: auto;
+  margin-right: auto;
+  
+}
+#wrap {
+  overflow-x: hidden;
+}
+
 img { max-width: 100%; }
-@import "~@angular/material/prebuilt-themes/pink-bluegrey.css";
 
 .error {
   background: #770000;
@@ -27,3 +38,34 @@ img { max-width: 100%; }
 }
 
 .cdk-overlay-pane { width: 100%; height: 100%; }
+
+.center {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.p2e {
+  padding: 2em;
+}
+p1e {
+  padding: 1em;
+}
+.pb0 {
+  padding-bottom: 0;
+}
+
+.note {
+  font-size: 80%;
+  opacity: .8;
+}
+
+.m1e {
+  margin: 1em;
+}
+.m1r {
+  margin: 1rem;
+}
+.mb0 {
+  margin-bottom: 0;
+}

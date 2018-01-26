@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterContentChecked, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Event, EventFormatted } from '../event/event';
 import { EVENT } from '../data/mock-event';
 import { EVENTS } from '../data/mock-events';
@@ -8,12 +8,23 @@ import { EventComponent } from '../event/event.component';
 import { RequestService } from '../http/request.service';
 import { DetailsService } from '../event/details.service';
 // import { OverlayService } from '../overlay/overlay.service';
-import { Observable, Subject, BehaviorSubject } from 'rxjs/RX';
+import { Observable } from 'rxjs/RX';
+import { environment } from '../../environments/environment';
 
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/concatAll';
 import 'rxjs/add/operator/mergeMap';
+
+class Settings {
+  startAt: number;
+  maxEvents: number;
+}
+
+const settings = {
+  startAt: 0,
+  maxEvents: 20
+};
 
 @Component({
   selector: 'app-events',
@@ -25,20 +36,21 @@ import 'rxjs/add/operator/mergeMap';
  * Assigns {events} from external data and creates related views
  */
 
-export class EventsComponent implements OnInit, AfterContentChecked {
+export class EventsComponent implements OnInit {
 
   constructor (
     private request: RequestService,
     private details: DetailsService,
-    // private overlay: OverlayService,
-    private change: ChangeDetectorRef
-  ) {
+    // private overlay: OverlayService
+  ) { this.settings = settings; }
 
-  }
+  demo: boolean;
 
   width = window.innerWidth;
 
-  events;
+  events; // starts as Event[] ends as EventFormatted[]
+
+  settings: Settings;
 
   private events_loaded = 0;
 
@@ -57,16 +69,26 @@ export class EventsComponent implements OnInit, AfterContentChecked {
     // this.overlay.open( EventComponent, event, 'event' );
   }
 
-   processEvents ( req, USER_ID ) {
+  /*
+   * @method processEvents
+   * converts Events[<Event>] to Events[<EventFormatted>]
+   */
+
+  private processEvents ( req, USER_ID, test? ) {
+    const s = this.settings;
+    // convert Event to Observable<Event>
     return req.mergeMap(
-        ( result: Array<Event> ) => {
-          return Observable.forkJoin(
-            result.map(
-              ( event: Event ) => this.details.eventDetails( event, USER_ID )
-            )
-          );
-        }
-      );
+      ( result: Array<Event> ) => {
+        // optionally slice the Events array
+        if ( s.maxEvents > 0 ) { result.slice( s.startAt, s.maxEvents ); }
+        // convert individual collection (Event) to observable (EventFormatted)
+        return Observable.forkJoin(
+          result.map(
+            ( event: Event ) => this.details.eventDetails( event, USER_ID, test )
+          )
+        );
+      }
+    );
   }
 
   /*
@@ -74,16 +96,18 @@ export class EventsComponent implements OnInit, AfterContentChecked {
    * requests from API and lists all events
    */
 
-  public listEvents ( USER_ID?: string, demo?: boolean ) {
+  public listEvents ( USER_ID: string, demo?: boolean ) {
 
     if ( demo ) {
 
       // convert fetched Event JSON into data model (EventFormatted)
       let req = this.request.getJSON( 'assets/data/events-mini' );
-      req = this.processEvents( req, USER_ID );
+      req = this.processEvents( req, USER_ID, demo );
       req.subscribe( v => {
         this.events = v;
+        this.onSelect( v[0] );
       });
+      return this.events;
 
     } else {
 
@@ -97,7 +121,7 @@ export class EventsComponent implements OnInit, AfterContentChecked {
             // retry if response is not valid JSON
             if ( typeof data !== 'object' ) {
               type_err = this.request.error('Events API returned an invalid response. Retrying...');
-              return this.listEvents();
+              return this.listEvents( USER_ID, demo );
             }
             this.events = data;
             const i = this.events_loaded++;
@@ -108,7 +132,7 @@ export class EventsComponent implements OnInit, AfterContentChecked {
             this.tries++;
             if ( this.tries < max_tries ) {
               this.request.error('Events API is unavailable. Retrying.');
-              this.listEvents();
+              this.listEvents( USER_ID, demo );
             } else {
               const msg = this.retry
                 ? 'Please check your connection and try again.'
@@ -118,7 +142,7 @@ export class EventsComponent implements OnInit, AfterContentChecked {
                 () => {
                   this.retry = true;
                   this.tries = 0;
-                  return this.listEvents( USER_ID );
+                  return this.listEvents( USER_ID, demo );
                 }
               );
             }
@@ -130,14 +154,12 @@ export class EventsComponent implements OnInit, AfterContentChecked {
   ngOnInit () {
 
     const USER_ID = 'anything';
-    const demo = !true;
+    // API calls disabled for production because external API is misconfigured (requires proxy to access images)
+    const demo = this.demo = environment.production || !true;
     if ( demo ) { this.request.demo_mode(); }
-    this.listEvents( USER_ID, demo );
+    const events = this.listEvents( USER_ID, demo );
+    // this.overlay.open( EventComponent, event, 'event' );
 
-  }
-
-  ngAfterContentChecked() {
-    // console.log(this.events);
   }
 
 }

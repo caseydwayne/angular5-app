@@ -1,53 +1,85 @@
-<div class="event" *ngIf="event; else noEvent">
+<div class="event row" *ngIf="event; else noEvent">
 
-  <img [src]="event.image" alt="Seeing this? Server returned a bogus response." />
-  
-  <h2>{{event.name}}</h2>
-  
-  <p>{{event.description}}</p>
-  
-  <div *ngIf="event.more; else noImages" class="images">
-    <div *ngIf="event.more.images">
-      <div *ngFor="let img of event.more.images">
-        <div class="wrap">
-          <img [src]="img.src" alt="Seeing this? Server returned a bogus response." />
-        </div>
-      </div>
+  <div class="col-10 offset-1">
+    <div class="main-image">
+      <img [src]="event.image" alt="Seeing this? Server returned a bogus response." />
     </div>
   </div>
-  <ng-template #noImages>No Images Found</ng-template>
   
-  <details>
-    <summary>Event Information</summary>
-    <div>
-      <p>Location: {{event.location.city}}, {{event.location.state}}</p>
-      <div *ngIf="event.more">
-        <div *ngIf="event.more.date">
+  <div class="col-10 offset-1">
+    <div class="event-content">
+      <h2>{{event.name}}</h2>  
+      <p>{{event.description}}</p>
+    </div>  
+  </div>
+  
+  <div class="col-10 offset-1">
+    <mat-expansion-panel>
+  
+      <mat-expansion-panel-header>
+        Event Information
+      </mat-expansion-panel-header>
+    
+      <div class="event-data">
+    
+        <p>Location: {{event.location.city}}, {{event.location.state}}</p>
+       
+        <div *ngIf="event.more">
+       
+          <div *ngIf="event.more.date">
           <p>Date: {{event.more.date | date:'MM/dd/y'}}</p>
         </div>
-        <div *ngIf="event.more.comments" class="comments">
-          <p>Comments:</p>
-          <ul>
-            <li *ngFor="let comment of event.more.comments.slice(0,10)">
-              Comment: {{comment.from}} says {{ comment.text | slice:0:157 }}...
-            </li> 
-          </ul>
-        </div>
-      </div>
-    </div>  
-  </details>
+        
+          <div *ngIf="event.more.comments" class="comments">
+            <h4>Comments:</h4>
+            <mat-grid-list [cols]="1">
+              <mat-card *ngFor="let comment of event.more.comments.slice(0,10)">
+                <mat-card-header>
+                  <mat-card-title>
+                    <strong>{{comment.from}}</strong>
+                  </mat-card-title>                
+                </mat-card-header>
+                <mat-card-content>
+                  {{ comment.text | slice:0:105 }}...
+                </mat-card-content>
+              </mat-card> 
+            </mat-grid-list>
+          </div>
+          
+        
+          <div *ngIf="!demo; else noImages" class="images">
+            <div *ngIf="event.more.images; else noImages">
+              <div *ngFor="let img of event.more.images">
+                <div class="wrap">
+                  <img [src]="img.src" alt="Seeing this? Server returned a bogus response." />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <ng-template #noImages>No Additional Media Available</ng-template>
   
-  <p>
+        </div>
+      </div>  
+    </mat-expansion-panel>
+  </div>
+  
+  <div class="col-10 offset-1">
+    
     <mat-slide-toggle [checked]="event.rsvp" (click)="toggleStatus(event)">
       Going
     </mat-slide-toggle>
-  </p>
     
-  <p>
-    <a href="mailto:?subject=Check this out!&body={{message}}">Share Event</a>
-  </p>
+  </div>
+      
+  <div class="col-10 offset-1">
+    <p>
+      <a href="mailto:?subject=Check this out!&body={{message}}">Share Event</a>
+    </p>
+  </div>
   
 </div>
+
 <ng-template #noEvent>
   <p>Could not load event.</p>
 </ng-template>
